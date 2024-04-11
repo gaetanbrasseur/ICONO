@@ -3,7 +3,7 @@ from bdd_icono.models import Image, Support, Auteur, Photographie, Institution
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ['legende',p 'num_inventaire','dept_collection', 'fk_support', 'fk_institution']
+    list_display = ['legende', 'num_inventaire','dept_collection', 'fk_support', 'fk_institution']
     list_display_links = ['legende']
     search_fields = ['legende']
 
