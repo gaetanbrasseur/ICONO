@@ -8,15 +8,15 @@ class Image(models.Model):
     dept_collection = models.CharField(max_length=250, null=True, blank=True)
     fond_collection = models.CharField(max_length=250, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE)
-    fk_institution = models.ForeignKey('Institution', on_delete=models.CASCADE)
-
+    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, null=True, blank=True)
+    fk_institution = models.ForeignKey('Institution', on_delete=models.CASCADE,null=True, blank=True)
+    existe_en_physique = models.CharField(null=True, blank=True)
 class DonneesBiblio(models.Model):
-    ref_biblio = models.TextField()
-    edition = models.TextField()
+    ref_biblio = models.TextField(null=True, blank=True)
+    edition = models.TextField(null=True, blank=True)
 
 class Institution(models.Model):
-    nom_institution = models.CharField(max_length=250, null=True, blank=True)
+    nom_institution = models.CharField(max_length=250, null=True, blank=True, verbose_name="Institution")
     pays = models.CharField(max_length=250, null=True, blank=True)
     ville = models.CharField(max_length=250, null=True, blank=True)
 
@@ -24,37 +24,38 @@ class Institution(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['nom_institution'], name='unique_nominstitution')
         ]
+        ordering = ['nom_institution']
 
 class MotCle(models.Model):
-    libelle_motCle = models.CharField(max_length = 250)
-    type_motCle = models.CharField(max_length=50)
+    motCle_libelle = models.CharField(max_length = 250, null=True, blank=True)
+    motCle_type = models.CharField(max_length=50, null=True, blank=True)
     class Meta:
-            ordering = ['libelle_motCle']
+            ordering = ['motCle_libelle']
 
 class Theme(models.Model):
-    libelle_theme = models.CharField(max_length=250)
+    theme_libelle = models.CharField(max_length=250, null=True, blank=True)
 
     class Meta:
         verbose_name = "Thème"
         verbose_name_plural = "Thèmes"
         constraints = [
-            models.UniqueConstraint(fields=['libelle_theme'], name='unique_libelletheme')
+            models.UniqueConstraint(fields=['theme_libelle'], name='unique_libelletheme')
             
         ]
-        ordering = ['libelle_theme']
+        ordering = ['theme_libelle']
 
 class IntImageTheme(models.Model):
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE)
-    fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE)
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
+    fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE, null=True, blank=True)
 
 class IntImageDonneesBiblio(models.Model):
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE)
-    fk_donneesBiblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE)
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
+    fk_donneesBiblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE,null=True, blank=True)
 
 
 class IntImageMotCle(models.Model):
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE)
-    fk_motCle = models.ForeignKey('MotCle', on_delete=models.CASCADE)
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
+    fk_motCle = models.ForeignKey('MotCle', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Support(models.Model):
@@ -65,7 +66,7 @@ class Support(models.Model):
     periode = models.CharField(max_length=250, null=True, blank=True)
 
 class Technique(models.Model):
-    libelle_technique = models.CharField(max_length=250)
+    libelle_technique = models.CharField(max_length=250, null=True, blank=True)
 
 class Auteur(models.Model):
     nom_auteur = models.CharField(max_length=250, null=True, blank=True)
@@ -84,12 +85,12 @@ class Auteur(models.Model):
         verbose_name_plural = 'Auteur.e.s'
 
 class IntSupportAuteur(models.Model):
-    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE)
-    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE)
+    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE,null=True, blank=True)
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE,null=True, blank=True)
 
 class IntSupportTechnique(models.Model):
-    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, verbose_name="Support")
-    fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE)
+    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, verbose_name="Support", null=True, blank=True)
+    fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE,null=True, blank=True)
 
 class Photographie(models.Model):
     photographie_format = models.CharField(max_length = 50, null=True, blank=True)
@@ -102,15 +103,15 @@ class Photographie(models.Model):
     couleur = models.CharField(max_length = 50, null=True, blank=True)
     resolution = models.CharField(max_length = 50, null=True, blank=True)
     nom_cliche_physique = models.CharField(max_length = 250, null=True, blank=True)
-    lien_telechargement = models.URLField(null=True, blank=True)
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE)
+    lienTelechargement = models.URLField(null=True, blank=True)
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
 
 class Utilisateur(models.Model):
-    nom_utilisateur = models.CharField(max_length=250)
-    prenom_utilisateur = models.CharField(max_length=250)
-    fk_autorisation = models.ForeignKey('Autorisation', on_delete=models.CASCADE)
+    nom_utilisateur = models.CharField(max_length=250, null=True, blank=True)
+    prenom_utilisateur = models.CharField(max_length=250, null=True, blank=True)
+    fk_autorisation = models.ForeignKey('Autorisation', on_delete=models.CASCADE, null=True, blank=True)
 
 class Autorisation(models.Model):
-    niveau = models.CharField(max_length=50)
-    description = models.TextField()
+    niveau = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
