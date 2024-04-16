@@ -27,8 +27,8 @@ class Institution(models.Model):
         ordering = ['nom_institution']
 
 class MotCle(models.Model):
-    motCle_libelle = models.CharField(max_length = 250, null=True, blank=True)
-    motCle_type = models.CharField(max_length=50, null=True, blank=True)
+    mot_cle_libelle = models.CharField(max_length = 250, null=True, blank=True)
+    mot_cle_type = models.CharField(max_length=50, null=True, blank=True)
     class Meta:
             ordering = ['motCle_libelle']
 
@@ -50,7 +50,7 @@ class IntImageTheme(models.Model):
 
 class IntImageDonneesBiblio(models.Model):
     fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
-    fk_donneesBiblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE,null=True, blank=True)
+    fk_donnees_biblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE,null=True, blank=True)
 
 
 class IntImageMotCle(models.Model):
@@ -103,7 +103,7 @@ class Photographie(models.Model):
     couleur = models.CharField(max_length = 50, null=True, blank=True)
     resolution = models.CharField(max_length = 50, null=True, blank=True)
     nom_cliche_physique = models.CharField(max_length = 250, null=True, blank=True)
-    lienTelechargement = models.URLField(null=True, blank=True)
+    lien_telechargement = models.URLField(null=True, blank=True)
     fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
 
 class Utilisateur(models.Model):
