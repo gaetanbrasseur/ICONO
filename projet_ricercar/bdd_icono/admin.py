@@ -1,31 +1,24 @@
 from django.contrib import admin
-from bdd_icono.models import Image, Support, Auteur, Photographie, Institution
+from .models import Image, Theme, MotCle, Support, Institution, DepartementCollection, DonneesBiblio, Photographe
 
-@admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ['legende', 'num_inventaire','dept_collection', 'fk_support', 'fk_institution']
-    list_display_links = ['legende']
-    search_fields = ['legende']
+    fieldsets = (
+        ('Informations sur la provenance de l\'image', {
+            'fields': ('fk_support', 'legende', 'fk_dpt', 'n_inventaire')
+        }),
+        ('Informations sur la photographie', {
+            'fields': ('n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
+        }),
+    )
+    list_display = ('legende', 'fk_support', 'n_inventaire', 'fk_dpt', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
+    list_filter = ('image_format', 'couleur', 'photographie_type')
+    search_fields = ['legende', 'n_inventaire', 'n_cesr']
 
-@admin.register(Support)
-class SupportAdmin(admin.ModelAdmin):
-    list_display = ['nom_support', 'categorie']
-    list_display_links = ['nom_support']
-    search_fileds = ['nom_support']
-
-@admin.register(Auteur)
-class AuteurAdmin(admin.ModelAdmin):
-    list_display = ['nom_auteur', 'prenom_auteur', 'pseudonyme']
-    list_display_links = ['nom_auteur']
-    search_field = ['nom_auteur', 'prenom_auteur', 'pseudonyme']
-    search_fields_help = 'Chercher par nom, prénom ou pseudonyme'
-
-@admin.register(Photographie)
-class PhotographieAdmin(admin.ModelAdmin):
-    list_display = ['num_doc_cesr','fk_image']
-
-
-@admin.register(Institution)
-class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ['nom_institution']
-
+admin.site.register(Image, ImageAdmin)
+admin.site.register(Theme)
+admin.site.register(MotCle)
+admin.site.register(Support)
+admin.site.register(Institution)
+admin.site.register(DepartementCollection)
+admin.site.register(DonneesBiblio)
+admin.site.register(Photographe)
