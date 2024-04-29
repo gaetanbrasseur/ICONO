@@ -29,12 +29,12 @@ class Image(models.Model):
 
 
 class Photographe(models.Model):
-    photographe_nom = models.CharField(max_length=250, null=True, blank=True)
-    photographe_prenom = models.CharField(max_length=250, null=True, blank=True)
+    photographe_nom = models.CharField(max_length=150, null=True, blank=True)
+    photographe_prenom = models.CharField(max_length=50, null=True, blank=True)
     agence = models.CharField(choices=[('RNM', 'RNM'), ('BNF', 'BNF')], null=True, blank=True)
 
 class DepartementCollection(models.Model):
-    departement_nom = models.CharField(max_length=250, null=True, blank=True)
+    departement_nom = models.CharField(max_length=30, null=True, blank=True)
     fk_institution = models.ForeignKey('Institution', on_delete=models.CASCADE, null=True, blank=True, verbose_name= "Institution")
 
     class Meta:
@@ -42,7 +42,7 @@ class DepartementCollection(models.Model):
         verbose_name_plural = 'Départements de collection'
 
 class Theme(models.Model):
-    theme_libelle = models.CharField(max_length=250, null=True, blank=True, verbose_name='Libellé du thème')
+    theme_libelle = models.CharField(max_length=150, null=True, blank=True, verbose_name='Libellé du thème')
 
     class Meta:
         verbose_name = 'Thème'
@@ -51,13 +51,13 @@ class Theme(models.Model):
             models.UniqueConstraint(fields=['theme_libelle'], name='unique_theme_libelle')]
 
 class Support(models.Model):
-    support_nom = models.CharField(max_length=250, null=True, blank=True)
-    categorie = models.CharField(max_length=250, null=True, blank=True, verbose_name='Catégorie')
-    date_creation = models.CharField(max_length=250, null=True, blank=True, verbose_name='Date de création')
-    periode_creation = models.CharField(max_length=250, null=True, blank=True, verbose_name='Période de création')
+    support_nom = models.CharField(max_length=150, null=True, blank=True)
+    categorie = models.CharField(max_length=40, null=True, blank=True, verbose_name='Catégorie')
+    date_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Date de création')
+    periode_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Période de création')
 
 class Technique(models.Model):
-    technique_libelle = models.CharField(max_length=250, null=True, blank=True)
+    technique_libelle = models.CharField(max_length=30, null=True, blank=True)
 
     class Meta:
         constraints = [
@@ -72,9 +72,9 @@ class DonneesBiblio(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['ref_biblio'], name='unique_ref_biblio')]
 class Institution(models.Model):
-    institution_nom = models.CharField(max_length=250, null=True, blank=True, verbose_name="Nom de l'institution")
-    pays = models.CharField(max_length=250, null=True, blank=True)
-    ville = models.CharField(max_length=250, null=True, blank=True)
+    institution_nom = models.CharField(max_length=50, null=True, blank=True, verbose_name="Nom de l'institution")
+    pays = models.CharField(max_length=30, null=True, blank=True)
+    ville = models.CharField(max_length=30, null=True, blank=True)
 
     class Meta:
         constraints = [
@@ -83,8 +83,8 @@ class Institution(models.Model):
         ordering = ['institution_nom']
 
 class MotCle(models.Model):
-    mot_cle_libelle = models.CharField(max_length=250, null=True, blank=True, verbose_name='Libellé du mot clé')
-    mot_cle_type = models.CharField(max_length=50, null=True, blank=True, verbose_name='Type du mot clé')
+    mot_cle_libelle = models.CharField(max_length=20, null=True, blank=True, verbose_name='Libellé du mot clé')
+    mot_cle_type = models.CharField(max_length=20, null=True, blank=True, verbose_name='Type du mot clé')
 
     class Meta:
         verbose_name = 'Mot clé'
@@ -96,9 +96,9 @@ class MotCle(models.Model):
         
 
 class Auteur(models.Model):
-    auteur_nom = models.CharField(max_length=250, null=True, blank=True, verbose_name='Nom')
-    auteur_prenom = models.CharField(max_length=250, null=True, blank=True, verbose_name='Prénom')
-    pseudonyme = models.CharField(max_length=250, null=True, blank=True)
+    auteur_nom = models.CharField(max_length=40, null=True, blank=True, verbose_name='Nom')
+    auteur_prenom = models.CharField(max_length=40, null=True, blank=True, verbose_name='Prénom')
+    pseudonyme = models.CharField(max_length=50, null=True, blank=True)
     lieu_activite = models.ManyToManyField('LieuActivite', through='IntAuteurLieuActivite')
     ecole = models.ManyToManyField('Ecole', through='IntAuteurEcole')
 
@@ -112,10 +112,10 @@ class Auteur(models.Model):
 
 
 class Ecole(models.Model):
-    ecole = models.CharField(max_length=250, null=False, blank=False)
+    ecole = models.CharField(max_length=80, null=False, blank=False)
 
 class LieuActivite(models.Model):
-    lieu_activite = models.CharField(max_length=250, null=False, blank=False)
+    lieu_activite = models.CharField(max_length=40, null=False, blank=False)
 
     class Meta:
         verbose_name = 'Lieu d\'activité'
