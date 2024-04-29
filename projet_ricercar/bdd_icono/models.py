@@ -112,10 +112,10 @@ class Auteur(models.Model):
 
 
 class Ecole(models.Model):
-    ecole = models.CharField(null=False, blank=False)
+    ecole = models.CharField(max_length=250, null=False, blank=False)
 
 class LieuActivite(models.Model):
-    lieu_activite = models.CharField(null=False, blank=False)
+    lieu_activite = models.CharField(max_length=250, null=False, blank=False)
 
     class Meta:
         verbose_name = 'Lieu d\'activité'
