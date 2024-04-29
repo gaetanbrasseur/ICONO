@@ -1,6 +1,8 @@
 from django.db import models
 class Image(models.Model):
     legende = models.TextField(null=True, blank=True, verbose_name='Légende')
+    description = models.TextField(null=True, blank=True)
+    commentaire = models.TextField(null=True, blank=True)
     existe_en_physique = models.BooleanField(null=False, blank=False, default=True)
     n_inventaire = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Numéro d\'inventaire dans l\'institution')
     n_cesr = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'numéro de document CESR')
@@ -27,12 +29,12 @@ class Image(models.Model):
 
 
 class Photographe(models.Model):
-    nom = models.CharField(max_length=250, null=True, blank=True)
-    prenom = models.CharField(max_length=250, null=True, blank=True)
+    photographe_nom = models.CharField(max_length=250, null=True, blank=True)
+    photographe_prenom = models.CharField(max_length=250, null=True, blank=True)
     agence = models.CharField(choices=[('RNM', 'RNM'), ('BNF', 'BNF')], null=True, blank=True)
 
 class DepartementCollection(models.Model):
-    nom = models.CharField(max_length=250, null=True, blank=True)
+    departement_nom = models.CharField(max_length=250, null=True, blank=True)
     fk_institution = models.ForeignKey('Institution', on_delete=models.CASCADE, null=True, blank=True, verbose_name= "Institution")
 
     class Meta:
@@ -49,12 +51,10 @@ class Theme(models.Model):
             models.UniqueConstraint(fields=['theme_libelle'], name='unique_theme_libelle')]
 
 class Support(models.Model):
-    nom = models.CharField(max_length=250, null=True, blank=True)
+    support_nom = models.CharField(max_length=250, null=True, blank=True)
     categorie = models.CharField(max_length=250, null=True, blank=True, verbose_name='Catégorie')
-    commentaire = models.TextField(null=True, blank=True)
     date_creation = models.CharField(max_length=250, null=True, blank=True, verbose_name='Date de création')
     periode_creation = models.CharField(max_length=250, null=True, blank=True, verbose_name='Période de création')
-    description = models.TextField(null=True, blank=True)
 
 class Technique(models.Model):
     technique_libelle = models.CharField(max_length=250, null=True, blank=True)
@@ -99,26 +99,49 @@ class Auteur(models.Model):
     auteur_nom = models.CharField(max_length=250, null=True, blank=True, verbose_name='Nom')
     auteur_prenom = models.CharField(max_length=250, null=True, blank=True, verbose_name='Prénom')
     pseudonyme = models.CharField(max_length=250, null=True, blank=True)
-    ecole = models.CharField(max_length=250, null=True, blank=True)
-    lieu_activite = models.CharField(max_length=250, null=True, blank=True, verbose_name='Lieu d\'activité')
+    lieu_activite = models.ManyToManyField('LieuActivite', through='IntAuteurLieuActivite')
+    ecole = models.ManyToManyField('Ecole', through='IntAuteurEcole')
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme'], name='unique_auteur'),
-            models.UniqueConstraint(fields=['ecole'], name='unique_ecole')
         ]
         ordering = ['auteur_nom', 'auteur_prenom']
         verbose_name = 'Auteur.e'
         verbose_name_plural = 'Auteur.e.s'
+
+
+class Ecole(models.Model):
+    ecole = models.CharField(null=False, blank=False)
+
+class LieuActivite(models.Model):
+    lieu_activite = models.CharField(null=False, blank=False)
+
+    class Meta:
+        verbose_name = 'Lieu d\'activité'
+        verbose_name_plural = 'Lieux d\'activité'
+
+class IntAuteurEcole(models.Model):
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False)
+    fk_ecole = models.ForeignKey('Ecole', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Ecole', related_name='auteurs')  # Relation inverse avec Ecole
+
+    class Meta:
+        verbose_name = 'Ecole artistique de l\'auteur'
+        verbose_name_plural = 'Ecoles artistiquess des auteurs'
+
+class IntAuteurLieuActivite(models.Model):
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE)
+    fk_lieu_activite = models.ForeignKey('LieuActivite', on_delete=models.CASCADE, verbose_name='Lieu d\'activté')
+
+    class Meta:
+        verbose_name = 'Lieu d\'activité de l\'auteur'
+        verbose_name_plural = 'Lieux d\'activité des auteurs'
 
 class IntImageTheme(models.Model):
     fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
     fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Thème')
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['fk_image', 'fk_theme'], name='unique_image_theme')
-        ]
         verbose_name='Thème'
         verbose_name_plural='Thèmes'
 
@@ -138,9 +161,6 @@ class IntImageMotCle(models.Model):
     fk_mot_cle = models.ForeignKey('MotCle', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Mot clé')
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['fk_image', 'fk_mot_cle'], name='unique_image_motcle')
-        ]
         verbose_name='Mot clé'
         verbose_name_plural='Mots clés'
 
