@@ -77,9 +77,6 @@ class Institution(models.Model):
     ville = models.CharField(max_length=30, null=True, blank=True)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['pays'], name='unique_pays')
-        ]
         ordering = ['institution_nom']
 
 class MotCle(models.Model):
