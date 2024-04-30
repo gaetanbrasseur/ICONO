@@ -101,7 +101,7 @@ class Auteur(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme'], name='unique_auteur'),
+            models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme', 'lieu_activite', 'ecole'], name='unique_auteur'),
         ]
         ordering = ['auteur_nom', 'auteur_prenom']
         verbose_name = 'Auteur.e'
