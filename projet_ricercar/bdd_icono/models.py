@@ -6,12 +6,12 @@ class Image(models.Model):
     existe_en_physique = models.BooleanField(null=False, blank=False, default=True)
     n_inventaire = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Numéro d\'inventaire dans l\'institution')
     n_cesr = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'numéro de document CESR')
-    image_format = models.CharField(choices=[('jpeg', 'JPEG'), ('tiff', 'TIFF')], null=False, blank=False, verbose_name="Format de l'image")
-    couleur = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc')], null=False, blank=False, verbose_name='Couleur')
-    resolution = models.CharField(max_length=50, null=False, blank=False, verbose_name = 'Résolution')
-    photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo')], null=False, blank=False, verbose_name="Type de photographie")
+    image_format = models.CharField(choices=[('jpeg', 'JPEG'), ('tiff', 'TIFF'),('NR','Non-renseigné')], default='non-renseigné', null=False, blank=False, verbose_name="Format de l'image")
+    couleur = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc'),('NR','Non-renseigné')], null=False, blank=False,default='non-renseigné', verbose_name='Couleur')
+    resolution = models.CharField(max_length=50, null=False, blank=False, default=('non-renseigné'), verbose_name = 'Résolution')
+    photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default=('non-renseigné'), null=False, blank=False, verbose_name="Type de photographie")
     credit = models.CharField(max_length=250, null=True, blank=True)
-    lien_telechargement = models.ImageField(upload_to='images/', null=False, blank=False, verbose_name='Dépôt du fichier image')
+    lien_telechargement = models.ImageField(upload_to='images/', null=True, blank=False, verbose_name='Dépôt du fichier image')
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True)
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True)
     fk_photographe = models.ForeignKey('Photographe', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Photographe")
@@ -101,7 +101,7 @@ class Auteur(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme', 'lieu_activite', 'ecole'], name='unique_auteur'),
+            models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme'], name='unique_auteur'),
         ]
         ordering = ['auteur_nom', 'auteur_prenom']
         verbose_name = 'Auteur.e'
@@ -119,8 +119,8 @@ class LieuActivite(models.Model):
         verbose_name_plural = 'Lieux d\'activité'
 
 class IntAuteurEcole(models.Model):
-    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False)
-    fk_ecole = models.ForeignKey('Ecole', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Ecole', related_name='auteurs')  # Relation inverse avec Ecole
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False, default=0)
+    fk_ecole = models.ForeignKey('Ecole', on_delete=models.CASCADE, null=False, blank=False, default=0, verbose_name='Ecole', related_name='auteurs')  # Relation inverse avec Ecole
 
     class Meta:
         verbose_name = 'Ecole artistique de l\'auteur'
@@ -135,16 +135,16 @@ class IntAuteurLieuActivite(models.Model):
         verbose_name_plural = 'Lieux d\'activité des auteurs'
 
 class IntImageTheme(models.Model):
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
-    fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Thème')
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False, default=0)
+    fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE, null=False, blank=False, default=0, verbose_name='Thème')
 
     class Meta:
         verbose_name='Thème'
         verbose_name_plural='Thèmes'
 
 class IntSupportTechnique(models.Model):
-    fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE, null=False, blank=False, verbose_name = 'Technique')
-    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, null=False, blank=False)
+    fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE, null=False, blank=False, default=0, verbose_name = 'Technique')
+    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, null=False, blank=False, default=0)
 
     class Meta:
         constraints = [
@@ -154,16 +154,16 @@ class IntSupportTechnique(models.Model):
         verbose_name_plural = 'Techniques du support'
 
 class IntImageMotCle(models.Model):
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
-    fk_mot_cle = models.ForeignKey('MotCle', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Mot clé')
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False, default=0)
+    fk_mot_cle = models.ForeignKey('MotCle', on_delete=models.CASCADE, null=False, blank=False, default=0, verbose_name='Mot clé')
 
     class Meta:
         verbose_name='Mot clé'
         verbose_name_plural='Mots clés'
 
 class IntImageDonneesBiblio(models.Model):
-    fk_donnees_biblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Donnée bibliographique correspondante à l\'image')
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
+    fk_donnees_biblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE, null=False, blank=False, default=0, verbose_name='Donnée bibliographique correspondante à l\'image')
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False, default=0)
 
     class Meta:
         constraints = [
@@ -173,8 +173,8 @@ class IntImageDonneesBiblio(models.Model):
         verbose_name_plural='Données bibliographiques'
 
 class IntSupportAuteur(models.Model):
-    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Auteur.e')
-    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, null=False, blank=False)
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False, default=0, verbose_name='Auteur.e')
+    fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, null=False, blank=False, default=0)
 
     class Meta:
         constraints = [
