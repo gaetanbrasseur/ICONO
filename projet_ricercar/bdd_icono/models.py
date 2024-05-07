@@ -15,7 +15,7 @@ class Image(models.Model):
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True)
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True)
     fk_photographe = models.ForeignKey('Photographe', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Photographe")
-    fk_dpt = models.ForeignKey('DepartementCollection', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Département de collection")
+    fk_departement = models.ForeignKey('DepartementCollection', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Département de collection")
     fk_support = models.ForeignKey('Support', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Support")
     theme = models.ManyToManyField('Theme', through='IntImageTheme')
     motCle = models.ManyToManyField('MotCle', through='IntImageMotCle')

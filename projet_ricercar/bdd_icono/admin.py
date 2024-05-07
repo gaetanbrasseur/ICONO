@@ -38,7 +38,7 @@ class IntAuteurLieuActiviteInLine(admin.StackedInline):
 class ImageAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Informations sur la provenance de l\'image', {
-            'fields': ('fk_support', 'legende', 'description', 'fk_dpt', 'n_inventaire')
+            'fields': ('fk_support', 'legende', 'description', 'fk_departement', 'n_inventaire')
         }),
         ('Informations sur la photographie', {
             'fields': ('n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
@@ -47,7 +47,7 @@ class ImageAdmin(admin.ModelAdmin):
             'fields': ('lien_telechargement',)
         })
     )
-    list_display = ('legende', 'fk_support', 'n_inventaire', 'fk_dpt', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
+    list_display = ('legende', 'fk_support', 'n_inventaire', 'fk_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
     list_filter = ('image_format', 'couleur', 'photographie_type', 'fk_support__date_creation', 'fk_support__periode_creation')
     search_fields = ['legende', 'n_inventaire', 'n_cesr', 'fk_support']
     search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR ou le nom du support'
