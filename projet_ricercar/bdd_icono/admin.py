@@ -34,7 +34,6 @@ class IntAuteurEcoleInLine(admin.StackedInline):
 class IntAuteurLieuActiviteInLine(admin.StackedInline):
     model = IntAuteurLieuActivite
 
-
 class ImageAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Informations sur la provenance de l\'image', {
@@ -47,10 +46,33 @@ class ImageAdmin(admin.ModelAdmin):
             'fields': ('lien_telechargement',)
         })
     )
-    list_display = ('legende', 'fk_support', 'n_inventaire', 'fk_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
-    list_filter = ('image_format', 'couleur', 'photographie_type', 'fk_support__date_creation', 'fk_support__periode_creation')
-    search_fields = ['legende', 'n_inventaire', 'n_cesr', 'fk_support']
-    search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR ou le nom du support'
+    list_display = ('legende', 'get_support', 'n_inventaire', 'get_institution_and_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type', 'get_siecle')
+
+    def get_support(self, obj):
+        return obj.fk_support.support_nom if obj.fk_support else "-"
+    get_support.short_description = 'Support'
+
+    def get_institution_and_departement(self, obj):
+        if obj.fk_departement:
+            departement = obj.fk_departement.departement_nom
+            if obj.fk_departement.fk_institution:
+                institution = obj.fk_departement.fk_institution.institution_nom
+            else:
+                institution = "-"
+        else:
+            departement = "-"
+            institution = "-"
+        return f"{institution} - {departement}"
+
+    get_institution_and_departement.short_description = 'Institution et département'
+
+    def get_siecle(self, obj):
+        return obj.get_siecle()
+    get_siecle.short_description = 'Siècle'
+
+    list_filter = ('image_format', 'couleur', 'photographie_type')
+    search_fields = ['legende','n_inventaire','n_cesr','fk_support__support_nom','fk_departement__departement_nom','fk_departement__fk_institution__institution_nom']
+    search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, le nom du support, le nom du département de collection ou le nom de l\'institution'
     inlines = [IntImageDonneesBiblioInLine, IntImageMotCleInLine, IntImageThemeInLine]
 
 
@@ -109,7 +131,10 @@ class DepartementCollectionAdmin(admin.ModelAdmin):
             'fields': ('departement_nom', 'fk_institution')
         }),
     )
-    list_display = ('departement_nom', 'fk_institution')
+    list_display = ('departement_nom', 'get_institution')
+    def get_institution(self, obj):
+        return obj.fk_institution.institution_nom if obj.fk_institution else "-"
+    get_institution.short_description = 'Institution'
     search_fields = ('departement_nom', 'fk_institution__institution_nom', 'fk_institution__pays')
 
 
