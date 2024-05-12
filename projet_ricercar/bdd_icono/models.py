@@ -21,6 +21,39 @@ class Image(models.Model):
     motCle = models.ManyToManyField('MotCle', through='IntImageMotCle')
     donneesBiblio = models.ManyToManyField('DonneesBiblio', through='IntImageDonneesBiblio')
 
+    def get_siecle(self):
+        if self.fk_support and self.fk_support.date_creation:
+            date_creation = self.fk_support.date_creation
+            if date_creation.startswith("vers"):
+                annee = date_creation.split("vers")[1].strip().split("-")
+                if len(annee) == 1:
+                    annee = int(annee[0])
+                    siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
+                    return f"{siecle}ème siècle"
+                else:
+                    debut_annee = int(annee[0])
+                    fin_annee = int(annee[1])
+                    debut_siecle = debut_annee // 100 + 1 if debut_annee % 100 != 0 else debut_annee // 100
+                    fin_siecle = fin_annee // 100 + 1 if fin_annee % 100 != 0 else fin_annee // 100
+                    if debut_siecle == fin_siecle:
+                        return f"{debut_siecle}ème siècle"
+                    else:
+                        return f"{debut_siecle}-{fin_siecle}ème siècle"
+            elif date_creation.startswith("avant"):
+                annee = int(date_creation.split("avant")[1].strip())
+                siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
+                return f"{siecle}ème siècle"
+            elif date_creation.startswith("après"):
+                annee = int(date_creation.split("après")[1].strip())
+                siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
+                return f"{siecle}ème siècle"
+            else:
+                annee = date_creation.split("-")[0].strip()
+                annee = int(annee)
+                siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
+                return f"{siecle}ème siècle"
+        return "Non-renseigné"
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['n_cesr'], name='unique_n_cesr'),
