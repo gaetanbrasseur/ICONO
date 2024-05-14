@@ -47,6 +47,9 @@ class ImageAdmin(admin.ModelAdmin):
     )
     list_display = ('legende', 'get_support', 'get_date', 'get_siecle', 'n_inventaire', 'get_institution_and_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
     list_filter = ('image_format', 'couleur', 'photographie_type', 'fk_support__periode_creation')
+    search_fields = ['legende','n_inventaire','n_cesr','fk_support__support_nom','fk_departement__departement_nom','fk_departement__fk_institution__institution_nom']
+    search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, le nom du support, le nom du département de collection ou le nom de l\'institution'
+    inlines = [IntImageDonneesBiblioInLine, IntImageMotCleInLine, IntImageThemeInLine]
 
     def get_support(self, obj):
         return obj.fk_support.support_nom if obj.fk_support else "-"
@@ -73,12 +76,6 @@ class ImageAdmin(admin.ModelAdmin):
         return f"{institution} - {departement}"
 
     get_institution_and_departement.short_description = 'Institution et département'
-
-   
-    search_fields = ['legende','n_inventaire','n_cesr','fk_support__support_nom','fk_departement__departement_nom','fk_departement__fk_institution__institution_nom']
-    search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, le nom du support, le nom du département de collection ou le nom de l\'institution'
-    inlines = [IntImageDonneesBiblioInLine, IntImageMotCleInLine, IntImageThemeInLine]
-
 
 class ThemeAdmin(admin.ModelAdmin):
     fieldsets = (
