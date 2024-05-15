@@ -9,3 +9,6 @@ def home(request):
         'nombre_image' : img_count
     }
     return render(request, 'bdd_icono/home.html',context)
+
+def inProgress(request):
+    return render(request, 'bdd_icono/in_progress.html')

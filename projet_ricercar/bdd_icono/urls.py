@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 # Create your views here.
 urlpatterns =[
     path('',views.home, name="home"),
+    path('inprogress/', views.inProgress, name='in_progress')
 ]
 
 if settings.DEBUG:
