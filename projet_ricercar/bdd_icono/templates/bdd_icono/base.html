@@ -13,29 +13,22 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home'%}">
+          <img src="{% static 'bdd_icono/img/image857.png'%}">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'home'%}">Accueil</a>
-            </li>
-            <li class="nav-item">
-              {% comment %} <a class="nav-link" href="{% url 'recherche' %}">Rechercher</a> {% endcomment %}
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Parcourir
-              </a>
-              {% comment %} <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'page_auteurs' %}"> Auteur.e.s</a></li>
-                <li><a class="dropdown-item" href="{% url 'page_livres' %}">Livres</a></li>
-                <li><a class="dropdown-item" href="{% url 'page_citations' %}">Citations</a></li>
-              </ul> {% endcomment %}
-            </li>
-          </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'in_progress' %}">Explorer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'in_progress' %}">Connexion</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'admin:index' %}">Back office</a>
             </li>
@@ -44,7 +37,16 @@
       </div>
     </nav>
     
-    <div class="container py-5">
+    <div class="container py-5"></div>
+
+    <nav class="navbar fixed-bottom navbar-light bg-light">
+      <div class="container-fluid">
+            <a class="nav-link" href="{% url 'in_progress' %}">Logos</a>
+            <div class="nav-link" href="{% url 'in_progress' %}"></div>
+            <a class="nav-link" href="{% url 'in_progress' %}">Contact</a>
+            <a class="nav-link" href="{% url 'in_progress' %}">Mentions legales</a>
+        </ul>
+    </nav>
     {%block contenu%}
 
     {%endblock%}
