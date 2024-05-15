@@ -104,9 +104,9 @@ credit VARCHAR(255) NULL,
 lien_telechargement VARCHAR(255) NULL,
 n_cliche_numerique VARCHAR(255) NULL,
 n_cliche_photo VARCHAR(255) NULL,
-fk_photographe_id VARCHAR(255) NULL,
-fk_departement_id VARCHAR(255) NULL,
-fk_support_id VARCHAR(255) NULL
+fk_photographe_id BIGINT NULL,
+fk_departement_id BIGINT NULL,
+fk_support_id BIGINT NULL
 );
 
 DROP TABLE IF EXISTS bdd_icono_donneesBiblio CASCADE;
