@@ -1,54 +1,86 @@
 {% load static %}
 
-<!DOCTYPE html><script nonce='eKM5AQ==' type='text/javascript' id='shelblockscript' src='//shelblock.proxy/shelblock.js?domain=celene.univ-tours.fr'></script>
+<!DOCTYPE html>
+<script nonce='eKM5AQ==' type='text/javascript' id='shelblockscript'
+  src='//shelblock.proxy/shelblock.js?domain=celene.univ-tours.fr'></script>
 <html>
-  <head lang="fr">
-    <meta charset="utf-8">
-    <title>{% block titre %}Base de données Icono{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
-  </head>
-  <body class="mb-4">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home'%}">
-          <img src="{% static 'bdd_icono/img/image857.png'%}">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'in_progress' %}">Explorer</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'in_progress' %}">Connexion</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin:index' %}">Back office</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    
-    <div class="container py-5"></div>
 
-    <nav class="navbar fixed-bottom navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="nav-link" href="{% url 'in_progress' %}">Logos</a>
-        <a class="nav-link" href="{% url 'in_progress' %}"></a>
-        <a class="nav-link" href="{% url 'in_progress' %}">Contact</a>
-        <a class="nav-link" href="{% url 'in_progress' %}">Mentions legales</a>
-    </nav>
+<head>
+  <meta charset="utf-8">
+  <title>{% block titre %}Base de données Icono{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'bdd_icono/css/icono_Ricercar.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
+    integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
+    async></script>
+</head>
+
+<body class="mb-4 rubiklight ">
+  <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm p-3 mb-5 ">
+    <div class="container-fluid">
+      <a {% url 'home' %}">
+        <img src="{% static 'bdd_icono/img/logo.png' %}" class=" img-fluid" width="320px" alt="Logo Ricercar Icono">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+        aria-controls="#navbar" aria-expanded="false" aria-label="Ouvrir et fermer la navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center rubikregular" id="navbar">
+        <ul class="nav navbar-nav me-auto nav-text-size">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home'%}">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'recherche' %}">Rechercher</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="{% url 'in_progress' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Explorer
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'in_progress' %}">Connexion</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}" aria-label="Back Office">Back office</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
     {%block contenu%}
 
     {%endblock%}
+  </div>
+  <footer class="d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark">
+    <div class="row">
+      <a class="col-2 mt-1" href="https://ricercar-tours.fr/" target="_blank" style="margin-left: 20px ;">
+        <img src="{% static 'bdd_icono/img/logo_ricercar_lab.png' %}" class="img-fluid" alt="Logo Ricercar">
+      </a>
+      <a class="col-2" href="https://cesr.cnrs.fr/">
+        <img src="https://ricercar-tours.fr/wp-content/uploads/2018/01/cesr.png" target="_blank" class="img-fluid" width="150px"
+          alt="Logo CESR">
+      </a>
+      <ul class="nav mt-2 col-md-4 justify-content-end nav-text-size">
+        <li class="nav-item">
+          <a class="nav-link text-light" href="{% url 'in_progress' %}"><u>Contacts</u></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="{% url 'in_progress' %}"><u>Mentions légales</u></a>
+        </li>
+      </ul>
     </div>
-    </body>
+  </footer>
+  
+
+</body>
+
 </html>
