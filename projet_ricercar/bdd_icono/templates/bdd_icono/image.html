@@ -1,0 +1,34 @@
+{% extends "bdd_icono/base.html" %}
+
+{% block contenu %}
+<h5>
+    faire la mise en page en bootstrap 
+  </h5>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <p>{{image.legende}}</p>
+        <p>{{image.description}}</p>
+        <p>{{image.commentaire}}</p>
+        <p>{{image.existe_en_physique}}</p>
+        <p>{{image.n_inventaire}}</p>
+        <p>{{image.n_cesr}}</p>
+        <p>{{image.image_format}}</p>
+        <p>{{image.couleur}}</p>
+        <p>{{image.resolution}}</p>
+        <p>{{image.photographie_type}}</p>
+        <p>{{image.credit}}</p>
+        <p>{{image.lien_telechargement}}</p>
+        <p>{{image.n_cliche_numerique}}</p>
+        <p>{{image.n_cliche_photo}}</p>
+        <p>{{image.fk_photographe}}</p>
+        <p>{{image.fk_departement}}</p>
+        <p>{{image.fk_support}}</p>
+        <p>{{image.theme}}</p>
+        <p>{{image.motCle}}</p>
+        <p>{{image.donneesBiblio}}</p>
+      
+      </div>
+    </div>
+  </div>
+{% endblock %}
