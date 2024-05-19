@@ -5,7 +5,10 @@ from django.conf.urls.static import static
 # Create your views here.
 urlpatterns =[
     path('',views.home, name="home"),
-    path('inprogress/', views.inProgress, name='in_progress')
+    path('inprogress/', views.inProgress, name='in_progress'),
+    path('recherche/', views.recherche, name='recherche'),
+    path('resultats/', views.resultats, name='resultats'),
+    path('image<int:id_image>/', views.image, name='image'),
 ]
 
 if settings.DEBUG:

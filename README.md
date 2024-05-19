@@ -4,10 +4,37 @@ Setup :
 
 Pour la production, on va utiliser le meme système que durant le cours de Mme Piat
 
-Donc environement virtuel
+Installation de nouveaux modules : verifier son installation en comparant le requirements.txt avec son enviroement en utilisant la commande suivante : 
 
-Dans cet environement virtuel, on inclus le dossier git
+pip list
 
-Chacun setup son propre Django, avec sa propre base de données bdd_icono sur pgMyAdmin
-Ensuite, on effectue les migrations
-Enfin, on importe les documents avec le json des données pour les test (le json n'est pas encore a jour)
+Si il y a des différences, installer les modules manquants
+
+Création de la base de données sur pgMyAdmin : bdd_icono
+Effectuer les migrations sur django
+Ensuite, à l'aide du JeuTest.sql, on importe les données directement dans pgAdmin à l'aide de l'outil requêtes
+
+Modifications du settings.py : 
+
+Ligne 33:
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'bdd_icono.apps.BddIconoConfig',
+    'crispy_forms',
+    'crispy_bootstrap5'
+]
+
+Ligne 124 :
+
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'bdd_icono','static')
+STATIC_URL = 'static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'bdd_icono', 'media')
+MEDIA_URL = 'media/'

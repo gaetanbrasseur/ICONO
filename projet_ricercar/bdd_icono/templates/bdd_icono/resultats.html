@@ -1,0 +1,17 @@
+{% extends "bdd_icono/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block contenu %}
+{% for image in images %}
+<div class="col">
+  <div class="card h-100">
+    <div class="card-body">
+      <h5 class="card-title"> Page image numéro {{ image.id }}
+        <a class="btn btn-info" href="{% url 'image' image.id %}">Voir l'image</a>
+      </h5>
+      <hr>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

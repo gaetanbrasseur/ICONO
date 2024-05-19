@@ -1,13 +1,15 @@
 {% extends "bdd_icono/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block contenu %}
   <div class="row">
     <div class="col">
       <div class="card">
-        <div class="card-body text-center">
-          <p class="card-text">2</p>
-          <hr>
-        </div>
+      {% comment %} <form action="{% url 'recherche' %}" method="POST">
+          {{ formulaire|crispy }}{% csrf_token %}
+          <input class="btn btn-info" type="submit" value="Rechercher (le bouton ne fonctionne pas)">
+        </form> {% endcomment %}
+        <a class="btn btn-info" href="{% url 'resultats'%}">Rechercher</a>
       </div>
     </div>
   </div>
