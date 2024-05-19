@@ -1,0 +1,54 @@
+/* éléments principaux */
+
+root {
+    --principalcolor : #033A29;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-logo {
+    margin-left: 20px;
+}
+
+.text-color-ric {
+    color: var(--principalcolor);
+}
+
+.custom-line {
+    margin-bottom: 0.5rem;
+    height: 14rem;
+}
+
+/* Fonts */
+
+@font-face {
+    font-family: Rubik;
+    src: url("../fonts/Rubik-Light.ttf");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: Rubik;
+    src: url("../fonts/Rubik-Regular.ttf");
+    font-weight: 400;
+}
+
+.rubiklight {
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
+  }
+
+.rubikregular {
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+  }
+
+/* Font size */
+
+.nav-text-size {
+    font-size: 1.5rem;
+}
