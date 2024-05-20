@@ -22,7 +22,7 @@
 <body class="mb-4 rubiklight ">
   <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm p-3 mb-5 ">
     <div class="container-fluid">
-      <a {% url 'home' %}">
+      <a href="{% url 'home' %}">
         <img src="{% static 'bdd_icono/img/logo.png' %}" class=" img-fluid" width="320px" alt="Logo Ricercar Icono">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
@@ -60,7 +60,7 @@
 
     {%endblock%}
   </div>
-  <footer class="d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark">
+  <footer class="d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark sticky-bottom">
     <div class="row">
       <a class="col-2 mt-1" href="https://ricercar-tours.fr/" target="_blank" style="margin-left: 20px ;">
         <img src="{% static 'bdd_icono/img/logo_ricercar_lab.png' %}" class="img-fluid" alt="Logo Ricercar">
@@ -79,8 +79,5 @@
       </ul>
     </div>
   </footer>
-  
-
 </body>
-
 </html>
