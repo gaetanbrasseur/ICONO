@@ -8,7 +8,7 @@ urlpatterns =[
     path('inprogress/', views.inProgress, name='in_progress'),
     path('recherche/', views.recherche, name='recherche'),
     path('resultats/', views.resultats, name='resultats'),
-    path('image<int:id_image>/', views.image, name='image'),
+    path('image/<int:id_image>/', views.image, name='image'),
 ]
 
 if settings.DEBUG:
