@@ -45,7 +45,7 @@ class ImageAdmin(admin.ModelAdmin):
             'fields': ('lien_telechargement',)
         })
     )
-    list_display = ('legende', 'get_support', 'get_date', 'get_siecle', 'n_inventaire', 'get_institution_and_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
+    list_display = ('legende', 'description', 'commentaire', 'get_support', 'get_date', 'get_siecle', 'n_inventaire', 'get_institution_and_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
     list_filter = ('image_format', 'couleur', 'photographie_type', 'fk_support__periode_creation')
     search_fields = ['legende','n_inventaire','n_cesr','fk_support__support_nom','fk_departement__departement_nom','fk_departement__fk_institution__institution_nom']
     search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, le nom du support, le nom du département de collection ou le nom de l\'institution'
