@@ -2,15 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block contenu %}
-  <div class="row">
-    <div class="col">
-      <div class="card">
-      {% comment %} <form action="{% url 'recherche' %}" method="POST">
-          {{ formulaire|crispy }}{% csrf_token %}
-          <input class="btn btn-info" type="submit" value="Rechercher (le bouton ne fonctionne pas)">
-        </form> {% endcomment %}
-        <a class="btn btn-info" href="{% url 'resultats'%}">Rechercher</a>
-      </div>
-    </div>
+<h1>Recherche</h1>
+<div class="card mb-4">
+  <div class="card-body">
+    <form action="{% url 'home' %}" name='query' method="POST">
+      {{ formulaire|crispy }}{% csrf_token %}
+      <input class="btn btn-info" type="submit" value="Rechercher">
+    </form>
   </div>
+</div>
+
 {% endblock %}
