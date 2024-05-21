@@ -1,11 +1,17 @@
 {% extends "bdd_icono/base.html" %}
+{% load static %}
 
 {% block contenu %}
+{%if param != '' %}
+{{images.count}} Resultats pour : {{param}}
+{%endif%}
 {% for image in images %}
 <div class="col">
   <div class="card h-100">
     <div class="card-body">
-      <h5 class="card-title"> Image : {{ image.n_cesr }}
+      <h5 class="card-title">
+        <img src= "" class="card-img-top" alt="{{image.legende}}">
+        {{image.commentaire|slice:"50" }}{% if image.commentaire|length > 50 %}...{% endif %}
         <a class="btn btn-info" href="{% url 'image' image.id %}">Voir l'image</a>
       </h5>
       <hr>
@@ -13,6 +19,7 @@
   </div>
 </div>
 {% endfor %}
+{% comment %} {%if images.paginator.num_pages > 1 %}
 <div class="pagination">
   <span class="step-links">
       {% if images.has_previous %}
@@ -32,4 +39,5 @@
       {% endif %}
   </span>
 </div>
+{% endif %} {% endcomment %}
 {% endblock %}

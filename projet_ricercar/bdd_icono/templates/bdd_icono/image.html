@@ -2,32 +2,31 @@
 
 {% block contenu %}
 <h5>
-    faire la mise en page en bootstrap 
   </h5>
   <div class="row">
     <div class="col">
       <div class="card">
         
-        <p>{{image.commentaire}}</p>
-        <p>{{image.legende}}</p>
-        <p>{{image.description}}</p>
-        <p>{{image.existe_en_physique}}</p>
-        <p>{{image.n_inventaire}}</p>
-        <p>{{image.n_cesr}}</p>
-        <p>{{image.image_format}}</p>
-        <p>{{image.couleur}}</p>
-        <p>{{image.resolution}}</p>
-        <p>{{image.photographie_type}}</p>
-        <p>{{image.credit}}</p>
-        <p>{{image.lien_telechargement}}</p>
-        <p>{{image.n_cliche_numerique}}</p>
-        <p>{{image.n_cliche_photo}}</p>
-        <p>{{image.fk_photographe}}</p>
-        <p>{{image.fk_departement}}</p>
-        <p>{{image.fk_support}}</p>
-        <p>{{image.theme}}</p>
-        <p>{{image.motCle}}</p>
-        <p>{{image.donneesBiblio}}</p>
+        <p>Commentaire : {{image.commentaire}}</p>
+        <p>Légende : {{image.legende}}</p>
+        <p>Description : {{image.description}}</p>
+        {% comment %} <p>{{image.existe_en_physique}}</p> {% endcomment %}
+        <p>Numéro d'inventaire : {{image.n_inventaire}}</p>
+        <p>Numéro d'inventaire CESR : {{image.n_cesr}}</p>
+        <p>Format de l'image : {{image.image_format}}</p>
+        <p>Couleur : {{image.couleur}}</p>
+        <p>Résolution de l'image : {{image.resolution}}</p>
+        <p>Type de photographie : {{image.photographie_type}}</p>
+        <p>Crédits : {{image.credit}}</p>
+        <p>Lien de téléchargement : {{image.lien_telechargement}}</p>
+        <p>Numéro de cliché numértique : {{image.n_cliche_numerique}}</p>
+        <p>Numéro de cliché photo : {{image.n_cliche_photo}}</p>
+        <p>Photographe : {{image.fk_photographe.auteur_nom}}</p>
+        <p>Dépratement de collection : {{image.fk_departement.departement_nom}}</p>
+        <p>Support : {{image.fk_support.support_nom}}</p>
+        <p>Thème : {{image.theme.theme_libelle}}</p>
+        <p>Mot clés : {{image.motCle.mot_cle_libelle}} ({{image.motCle.mot_cle_type}})</p>
+        <p>Données bibliographiques : {{image.donneesBiblio.ref_biblio}}</p>
       </div>
     </div>
   </div>

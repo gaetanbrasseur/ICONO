@@ -5,11 +5,10 @@
 <h1>Recherche</h1>
 <div class="card mb-4">
   <div class="card-body">
-    <form action="{% url 'home' %}" name='query' method="POST">
+    <form action="{% url 'resultats' %}" name='query' method="POST">
       {{ formulaire|crispy }}{% csrf_token %}
       <input class="btn btn-info" type="submit" value="Rechercher">
     </form>
   </div>
 </div>
-
 {% endblock %}
