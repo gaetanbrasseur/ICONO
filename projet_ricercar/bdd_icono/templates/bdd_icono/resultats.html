@@ -1,35 +1,47 @@
 {% extends "bdd_icono/base.html" %}
 
 {% block contenu %}
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col display-3 text-color-ric"><u>Résultats</u></div>
+</div>
+<br>
 {% for image in images %}
-<div class="col">
-  <div class="card h-100">
-    <div class="card-body">
-      <h5 class="card-title"> Image : {{ image.n_cesr }}
-        <a class="btn btn-info" href="{% url 'image' image.id %}">Voir l'image</a>
-      </h5>
-      <hr>
-    </div>
+<div class="row justify-content-center custom-line">
+  <div class="col-2 bg-dark border rounded mx-1">
+    <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" width="100%">
+  </div>
+  <div class="col-5 bg-light border rounded">
+      <h5 class="card-title">{{ image.n_cesr }}</h5>
+      <dl>
+        <dt class="font-weight-bold text-color-ric">Auteur : {{ image.fk_support.fk_auteur.auteur_nom }}</dt>
+        <dt>Légende : {{ image.legende }}</dt>
+        <dt>Description : {{ image.description }}</dt>
+        <dt>Date : {{ image.fk_support.date_creation }}</dt>
+        <dt>Mots-clés : {{ image.motCle.mot_cle_libelle }}</dt>
+      </dl>
+      <a class="btn btn-info" href="{% url 'image' image.id %}">Voir l'image</a>
   </div>
 </div>
 {% endfor %}
+
 <div class="pagination">
   <span class="step-links">
-      {% if images.has_previous %}
-          <a href="?page=1">Première page</a>
-          {% if images.previous_page_number != 1 %}
-            <a href="?page={{ images.previous_page_number }}">Page {{images.previous_page_number}}</a>
-          {%endif%}
-      {% endif %}
-      <span class="current">
-          Page {{ images.number }} sur {{ images.paginator.num_pages }}.
-      </span>
-      {% if images.has_next %}
-        {% if images.next_page_number != images.paginator.num_pages%}
-        <a href="?page={{ images.next_page_number }}">Page {{images.next_page_number}}</a>
-        {%endif%}
-      <a href="?page={{ images.paginator.num_pages }}">Dernière page</a>
-      {% endif %}
+    {% if images.has_previous %}
+    <a href="?page=1">Première page</a>
+    {% if images.previous_page_number != 1 %}
+    <a href="?page={{ images.previous_page_number }}">Page {{images.previous_page_number}}</a>
+    {%endif%}
+    {% endif %}
+    <span class="current">
+      Page {{ images.number }} sur {{ images.paginator.num_pages }}.
+    </span>
+    {% if images.has_next %}
+    {% if images.next_page_number != images.paginator.num_pages%}
+    <a href="?page={{ images.next_page_number }}">Page {{images.next_page_number}}</a>
+    {%endif%}
+    <a href="?page={{ images.paginator.num_pages }}">Dernière page</a>
+    {% endif %}
   </span>
 </div>
 {% endblock %}
