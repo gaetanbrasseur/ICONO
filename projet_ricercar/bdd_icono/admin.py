@@ -1,17 +1,17 @@
 from django.contrib import admin
 from .models import (
-    Image, Theme, MotCle, Support, Institution, DepartementCollection,
-    DonneesBiblio, Photographe, Auteur, Technique, IntSupportAuteur,
-    IntSupportTechnique, IntImageDonneesBiblio, IntImageTheme, IntImageMotCle,
+    Image, Theme, MotCle, ExtraitDe, Institution, DepartementCollection,
+    DonneesBiblio, Photographe, Auteur, Technique, IntExtraitDeAuteur,
+    IntExtraitDeTechnique, IntImageDonneesBiblio, IntImageTheme, IntImageMotCle,
     IntAuteurEcole, IntAuteurLieuActivite
 )
 
-class IntSupportAuteurInLine(admin.StackedInline):
-    model = IntSupportAuteur
+class IntExtraitDeAuteurInLine(admin.StackedInline):
+    model = IntExtraitDeAuteur
 
 
-class IntSupportTechniqueInLine(admin.StackedInline):
-    model = IntSupportTechnique
+class IntExtraitDeTechniqueInLine(admin.StackedInline):
+    model = IntExtraitDeTechnique
 
 
 class IntImageDonneesBiblioInLine(admin.StackedInline):
@@ -36,31 +36,31 @@ class IntAuteurLieuActiviteInLine(admin.StackedInline):
 class ImageAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Informations sur la provenance de l\'image', {
-            'fields': ('fk_support', 'legende', 'description', 'fk_departement', 'n_inventaire')
+            'fields': ('fk_extrait_de', 'legende', 'description', 'fk_departement', 'n_inventaire')
         }),
         ('Informations sur la photographie', {
-            'fields': ('n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
+            'fields': ('n_cesr', 'fk_photographe', 'image_format', 'mode', 'resolution', 'photographie_type')
         }),
         ('Dépôt du fichier image :', {
             'fields': ('lien_telechargement',)
         })
     )
-    list_display = ('legende', 'description', 'commentaire', 'get_support', 'get_date', 'get_siecle', 'n_inventaire', 'get_institution_and_departement', 'n_cesr', 'fk_photographe', 'image_format', 'couleur', 'resolution', 'photographie_type')
-    list_filter = ('image_format', 'couleur', 'photographie_type', 'fk_support__periode_creation')
-    search_fields = ['legende','n_inventaire','n_cesr','fk_support__support_nom','fk_departement__departement_nom','fk_departement__fk_institution__institution_nom']
+    list_display = ('legende', 'description', 'get_extrait_de', 'get_date', 'get_siecle', 'cote', 'get_institution_and_departement', 'n_cesr', 'fk_photographe', 'image_format', 'mode', 'resolution', 'photographie_type')
+    list_filter = ('image_format', 'mode', 'photographie_type', 'fk_extrait_de__periode_creation')
+    search_fields = ['legende','n_inventaire','n_cesr','fk_extrait_de__extrait_de_nom','fk_departement__departement_nom','fk_departement__fk_institution__institution_nom']
     search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, le nom du support, le nom du département de collection ou le nom de l\'institution'
     inlines = [IntImageDonneesBiblioInLine, IntImageMotCleInLine, IntImageThemeInLine]
 
-    def get_support(self, obj):
-        return obj.fk_support.support_nom if obj.fk_support else "-"
-    get_support.short_description = 'Support'
+    def get_extrait_de(self, obj):
+        return obj.fk_extrait_de.extrait_de_nom if obj.fk_extrait_de else "-"
+    get_extrait_de.short_description = 'Support'
 
     def get_date(self, obj):
-        return obj.fk_support.date_creation if obj.fk_support else "-"
+        return obj.fk_extrait_de.date_creation if obj.fk_extrait_de else "-"
     get_date.short_description = 'Date'
 
     def get_siecle(self, obj):
-        return obj.fk_support.periode_creation if obj.fk_support else "-"
+        return obj.fk_extrait_de.periode_creation if obj.fk_extrait_de else "-"
     get_siecle.short_description = 'Siècle'
 
     def get_institution_and_departement(self, obj):
@@ -98,20 +98,20 @@ class MotCleAdmin(admin.ModelAdmin):
     search_fields = ('mot_cle_libelle', 'mot_cle_type',)
 
 
-class SupportAdmin(admin.ModelAdmin):
+class ExtraitDeAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Description technique du support d\'une image', {
-            'fields': ('support_nom', 'categorie')
+            'fields': ('extrait_de_nom', 'categorie')
         }),
         ('Informations historiques et iconographiques', {
             'fields': ('date_creation', 'periode_creation')
         }),
     )
-    list_display = ('support_nom', 'date_creation', 'periode_creation')
+    list_display = ('extrait_de_nom', 'date_creation', 'periode_creation')
     list_filter = ('periode_creation', 'categorie')
-    search_fields = ['support_nom']
+    search_fields = ['extrait_de_nom']
     search_help_text = 'La recherche porte sur le nom du support, sa catégorie, etc.'
-    inlines = [IntSupportAuteurInLine, IntSupportTechniqueInLine]
+    inlines = [IntExtraitDeAuteurInLine, IntExtraitDeTechniqueInLine]
 
 
 class InstitutionAdmin(admin.ModelAdmin):
@@ -177,7 +177,7 @@ class IntAuteurLieuActiviteInLine(admin.TabularInline):
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(MotCle, MotCleAdmin)
-admin.site.register(Support, SupportAdmin)
+admin.site.register(ExtraitDe, ExtraitDeAdmin)
 admin.site.register(Institution, InstitutionAdmin)
 admin.site.register(DepartementCollection, DepartementCollectionAdmin)
 admin.site.register(DonneesBiblio, DonneesBiblioAdmin)
