@@ -38,3 +38,11 @@ STATIC_URL = 'static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'bdd_icono', 'media')
 MEDIA_URL = 'media/'
+
+Fin du document :
+
+MOT_CLE_TYPE_CHOICES = [
+    ('generique', 'Générique'),
+    ('chant', 'Chant'),
+    ('instrument', 'Instrument de musique'),
+]
