@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 class Image(models.Model):
     legende = models.TextField(null=True, blank=True, verbose_name='Légende')
     description = models.TextField(null=False, blank=False,verbose_name='Description libre')
@@ -9,11 +10,11 @@ class Image(models.Model):
     mode = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc'),('NR','Non-renseigné')], null=False, blank=False,default='Couleur', verbose_name='Mode')
     resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution')
     photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default='numerique', null=False, blank=False, verbose_name="Type de photographie")
-    credit = models.CharField(max_length=250, null=True, blank=True)
+    credit = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Crédit")
     lien_telechargement = models.ImageField(upload_to='media/bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image')
-    permalien = models.CharField(max_length=250, null=False, blank=False,)
-    n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True)
-    n_cliche_photo = models.CharField(max_length=250, null=True, blank=True)
+    permalien = models.CharField(max_length=250, null=True, blank=True,)
+    n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Numéro de cliché numérique")
+    n_cliche_photo = models.CharField(max_length=250, null=True, blank=True,  verbose_name = "Numéro de cliché physique")
     fk_photographe = models.ForeignKey('Photographe', on_delete=models.CASCADE, null=False, blank=False, verbose_name="Photographe")
     fk_departement = models.ForeignKey('DepartementCollection', on_delete=models.CASCADE, null=False, blank=False, verbose_name="Département de collection")
     fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Extrait de")
@@ -63,9 +64,19 @@ class Image(models.Model):
     
 
 class Photographe(models.Model):
-    photographe_nom = models.CharField(max_length=150, null=True, blank=True)
-    photographe_prenom = models.CharField(max_length=50, null=True, blank=True)
-    agence = models.CharField(choices=[('RNM', 'RNM'), ('BNF', 'BNF')], null=True, blank=True)
+    photographe_nom = models.CharField(max_length=150, null=True, blank=True, verbose_name="Nom du photographe")
+    photographe_prenom = models.CharField(max_length=50, null=True, blank=True, verbose_name="Prénom du photographe")
+    AGENCE_CHOICES = [
+        ('RNM', 'RNM'),
+        ('BNF', 'BNF'),
+    ]
+    agence = models.CharField(choices=AGENCE_CHOICES, null=True, blank=True)
+
+    def __str__(self):
+        nom = self.photographe_nom if self.photographe_nom else ""
+        prenom = self.photographe_prenom if self.photographe_prenom else ""
+        return f"{prenom} {nom} - {self.agence}".strip(" -")
+
 
 class DepartementCollection(models.Model):
     departement_nom = models.CharField(max_length=30, null=True, blank=True)
@@ -74,6 +85,9 @@ class DepartementCollection(models.Model):
     class Meta:
         verbose_name = 'Département de collection'
         verbose_name_plural = 'Départements de collection'
+    
+    def __str__(self):
+        return self.departement_nom
 
 class Theme(models.Model):
     theme_libelle = models.CharField(max_length=150, null=False, blank=False, verbose_name='Libellé du thème')
@@ -89,12 +103,19 @@ class ExtraitDe(models.Model):
     date_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Date de création')
     periode_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Période de création')
 
+    def __str__(self):
+        return self.extrait_de_nom
+
+
 class Technique(models.Model):
     technique_libelle = models.CharField(max_length=30, null=False, blank=False)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['technique_libelle'], name='unique_technique_libelle')]
+    
+    def __str__(self):
+        return self.technique_libelle
         
 class DonneesBiblio(models.Model):
     ref_biblio = models.TextField(null=False, blank=False, verbose_name='Référence bibliographique')
@@ -114,9 +135,12 @@ class Institution(models.Model):
     class Meta:
         ordering = ['institution_nom']
 
+    def __str__(self):
+        return self.institution_nom
+
 class MotCle(models.Model):
     mot_cle_libelle = models.CharField(max_length=20, null=False, blank=False, verbose_name='Libellé du mot clé')
-    mot_cle_type = models.CharField(max_length=20, null=False, blank=False, verbose_name='Type du mot clé')
+    mot_cle_type = models.CharField(max_length=20, choices=settings.MOT_CLE_TYPE_CHOICES, null=False, blank=False, verbose_name='Type du mot clé')
 
     class Meta:
         verbose_name = 'Mot clé'
@@ -125,7 +149,9 @@ class MotCle(models.Model):
             models.UniqueConstraint(fields=['mot_cle_libelle'], name='unique_mot_cle_libelle'),
             models.UniqueConstraint(fields=['mot_cle_type'], name='unique_mot_cle_type')
         ]
-        
+
+    def __str__(self):
+        return self.mot_cle_libelle
 
 class Auteur(models.Model):
     auteur_nom = models.CharField(max_length=40, null=False, blank=False, verbose_name='Nom')
