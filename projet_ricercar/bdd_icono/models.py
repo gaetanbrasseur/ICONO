@@ -10,13 +10,13 @@ class Image(models.Model):
     resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution')
     photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default='numerique', null=False, blank=False, verbose_name="Type de photographie")
     credit = models.CharField(max_length=250, null=True, blank=True)
-    permalien = models.ImageField(upload_to='images/', null=False, blank=False, verbose_name='Dépôt du fichier image')
-    lien_telechargement = models.CharField(max_length=250, null=False, blank=False,)
+    lien_telechargement = models.ImageField(upload_to='media/bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image')
+    permalien = models.CharField(max_length=250, null=False, blank=False,)
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True)
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True)
     fk_photographe = models.ForeignKey('Photographe', on_delete=models.CASCADE, null=False, blank=False, verbose_name="Photographe")
     fk_departement = models.ForeignKey('DepartementCollection', on_delete=models.CASCADE, null=False, blank=False, verbose_name="Département de collection")
-    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="ExtraitDe")
+    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Extrait de")
     themes = models.ManyToManyField('Theme', through='IntImageTheme')
     mots_cles = models.ManyToManyField('MotCle', through='IntImageMotCle')
     donnees_biblio = models.ManyToManyField('DonneesBiblio', through='IntImageDonneesBiblio')
@@ -84,7 +84,7 @@ class Theme(models.Model):
             models.UniqueConstraint(fields=['theme_libelle'], name='unique_theme_libelle')]
 
 class ExtraitDe(models.Model):
-    extrait_de_nom = models.CharField(max_length=150, null=False, blank=False)
+    extrait_de_nom = models.CharField(max_length=150, null=False, blank=False, verbose_name='Nom extrait')
     categorie = models.CharField(max_length=40, null=False, blank=False, verbose_name='Catégorie')
     date_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Date de création')
     periode_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Période de création')
