@@ -3,16 +3,18 @@ from .models import (
     Image, Theme, MotCle, ExtraitDe, Institution, DepartementCollection,
     DonneesBiblio, Photographe, Auteur, Technique, IntExtraitDeAuteur,
     IntExtraitDeTechnique, IntImageDonneesBiblio, IntImageTheme, IntImageMotCle,
-    IntAuteurEcole, IntAuteurLieuActivite
+    IntAuteurEcole, IntAuteurLieuActivite, Ecole, LieuActivite
 )
 from django import forms
 
 class IntExtraitDeAuteurInLine(admin.StackedInline):
     model = IntExtraitDeAuteur
+    extra = 0
 
 
 class IntExtraitDeTechniqueInLine(admin.StackedInline):
     model = IntExtraitDeTechnique
+    extra = 0
 
 
 class IntImageDonneesBiblioInLine(admin.StackedInline):
@@ -32,10 +34,12 @@ class IntImageThemeInLine(admin.StackedInline):
 
 class IntAuteurEcoleInLine(admin.StackedInline):
     model = IntAuteurEcole
+    extra = 0
 
 
 class IntAuteurLieuActiviteInLine(admin.StackedInline):
     model = IntAuteurLieuActivite
+    extra = 0
 
 class ImageAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -148,6 +152,25 @@ class PhotographeAdmin(admin.ModelAdmin):
     list_display = ('photographe_nom', 'photographe_prenom', 'agence')
     search_fields = ('photographe_nom', 'photographe_prenom', 'agence')
 
+class EcoleAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Information sur l\'école', {
+            'fields': ('ecole',)
+        }),
+    )
+    list_display = ('ecole',)
+    search_fields = ('ecole',)
+
+class LieuActiviteAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Information sur le lieu d\'activité des auteurs', {
+            'fields': ('lieu_activite',)
+        }),
+    )
+    list_display = ('lieu_activite',)
+    search_fields = ('lieu_activite',)
+
+
 class AuteurAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Informations sur l\'auteur.e', {
@@ -164,6 +187,8 @@ class IntAuteurEcoleInLine(admin.TabularInline):
 class IntAuteurLieuActiviteInLine(admin.TabularInline):
     model = IntAuteurLieuActivite
 
+admin.site.register(Ecole, EcoleAdmin)
+admin.site.register(LieuActivite, LieuActiviteAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(MotCle, MotCleAdmin)
