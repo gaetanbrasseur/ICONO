@@ -1,17 +1,19 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+
 class Image(models.Model):
     legende = models.TextField(null=True, blank=True, verbose_name='Légende')
     description = models.TextField(null=False, blank=False,verbose_name='Description libre')
     existe_en_physique = models.BooleanField(null=False, blank=False, default=True)
     cote = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Cote')
-    n_cesr = models.CharField(max_length=150, null=False, blank=False, verbose_name = 'numéro de document CESR')
+    n_cesr = models.CharField(max_length=150, null=False, blank=False, verbose_name = 'numéro de document CESR', help_text=' Format : im_0000')
     image_format = models.CharField(choices=[('jpeg', 'JPEG'), ('tiff', 'TIFF'),('NR','Non-renseigné')], default='tiff', null=False, blank=False, verbose_name="Format de l'image")
     mode = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc'),('NR','Non-renseigné')], null=False, blank=False,default='Couleur', verbose_name='Mode')
     resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution')
     photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default='numerique', null=False, blank=False, verbose_name="Type de photographie")
     credit = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Crédit")
-    lien_telechargement = models.ImageField(upload_to='media/bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image')
+    lien_telechargement = models.ImageField(upload_to='media/bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image', help_text='Les images doivent être de format TIFF ou JPEG.')
     permalien = models.CharField(max_length=250, null=True, blank=True,)
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Numéro de cliché numérique")
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True,  verbose_name = "Numéro de cliché physique")
@@ -79,7 +81,7 @@ class Photographe(models.Model):
 
 
 class DepartementCollection(models.Model):
-    departement_nom = models.CharField(max_length=30, null=True, blank=True)
+    departement_nom = models.CharField(max_length=30, null=True, blank=True, verbose_name='Nom du département de collection')
     fk_institution = models.ForeignKey('Institution', on_delete=models.SET_NULL, null=True, blank=True, verbose_name= "Institution")
 
     class Meta:
@@ -98,10 +100,10 @@ class Theme(models.Model):
             models.UniqueConstraint(fields=['theme_libelle'], name='unique_theme_libelle')]
 
 class ExtraitDe(models.Model):
-    extrait_de_nom = models.CharField(max_length=150, null=False, blank=False, verbose_name='Nom extrait')
-    categorie = models.CharField(max_length=40, null=False, blank=False, verbose_name='Catégorie')
-    date_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Date de création')
-    periode_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Période de création')
+    extrait_de_nom = models.CharField(max_length=150, null=False, blank=False, verbose_name='Nom de l\'extrait')
+    categorie = models.CharField(max_length=40, null=False, blank=False, verbose_name='Catégorie', help_text='Catégorie de l\'extrait (manuscrit, tableau, etc.)')
+    date_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Date de création', help_text='Format : AAAA pour une année précise, AAAA - AAAA pour une plage d\'années. Préfixes possibles : Avant, Vers, Après')
+    periode_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Période de création', help_text='Format : Siècle en chiffre, suivi de "e Siècle". Exemple : 3e Siècle, 15e Siècle, 14e Siècle - 15e Siècle')
 
     def __str__(self):
         return self.extrait_de_nom
@@ -154,7 +156,7 @@ class MotCle(models.Model):
         return self.mot_cle_libelle
 
 class Auteur(models.Model):
-    auteur_nom = models.CharField(max_length=40, null=False, blank=False, verbose_name='Nom')
+    auteur_nom = models.CharField(max_length=40, null=False, blank=False, verbose_name='Nom', help_text='Si artiste Anonyme, indiquez Anonyme en Nom et précisez si possible son école et/ou lieu d\'activité')
     auteur_prenom = models.CharField(max_length=40, null=True, blank=True, verbose_name='Prénom')
     pseudonyme = models.CharField(max_length=50, null=True, blank=True)
     lieux_activites = models.ManyToManyField('LieuActivite', through='IntAuteurLieuActivite')
@@ -168,9 +170,11 @@ class Auteur(models.Model):
         verbose_name = 'Auteur.e'
         verbose_name_plural = 'Auteur.e.s'
 
-
 class Ecole(models.Model):
     ecole = models.CharField(max_length=80, null=False, blank=False)
+
+    def __str__(self):
+        return self.ecole
 
 class LieuActivite(models.Model):
     lieu_activite = models.CharField(max_length=40, null=False, blank=False)
@@ -179,6 +183,9 @@ class LieuActivite(models.Model):
         verbose_name = 'Lieu d\'activité'
         verbose_name_plural = 'Lieux d\'activité'
 
+    def __str__(self):
+        return self.lieu_activite
+
 
 class IntAuteurEcole(models.Model):
     fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False)
@@ -186,7 +193,7 @@ class IntAuteurEcole(models.Model):
 
     class Meta:
         verbose_name = 'Ecole artistique de l\'auteur'
-        verbose_name_plural = 'Ecoles artistiquess des auteurs'
+        verbose_name_plural = 'Ecoles artistiques des auteurs'
 
 class IntAuteurLieuActivite(models.Model):
     fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE)
@@ -206,14 +213,14 @@ class IntImageTheme(models.Model):
 
 class IntExtraitDeTechnique(models.Model):
     fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE, null=False, blank=False, verbose_name = 'Technique')
-    fk_support = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
+    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['fk_technique', 'fk_support'], name='unique_support_technique')
+            models.UniqueConstraint(fields=['fk_technique', 'fk_extrait_de'], name='unique_extrait_technique')
         ]
-        verbose_name = 'Technique du support'
-        verbose_name_plural = 'Techniques du support'
+        verbose_name = 'Technique de l\'extrait'
+        verbose_name_plural = 'Techniques de l\'extrait'
 
 class IntImageMotCle(models.Model):
     fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
@@ -236,11 +243,11 @@ class IntImageDonneesBiblio(models.Model):
 
 class IntExtraitDeAuteur(models.Model):
     fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Auteur.e')
-    fk_support = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
+    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['fk_auteur', 'fk_support'], name='unique_support_auteur')
+            models.UniqueConstraint(fields=['fk_auteur', 'fk_extrait_de'], name='unique_extrait_auteur')
         ]
-        verbose_name = 'Auteur.e du support'
-        verbose_name_plural = 'Auteur.e.s du support'
+        verbose_name = 'Auteur.e de l\'extrait'
+        verbose_name_plural = 'Auteur.e.s de l\'extrait'
