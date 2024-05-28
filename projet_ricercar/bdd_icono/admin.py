@@ -52,10 +52,11 @@ class ImageAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ['mots_cles', 'themes', 'fk_photographe', 'fk_extrait_de', 'fk_departement']
     inlines = [IntImageMotCleInLine, IntImageThemeInLine]
-    list_display = ('get_description_extrait', 'legende', 'cote', 'get_extrait', 'get_date', 'get_periode', 'lien_telechargement')
+    list_display = ('n_cesr','get_description_extrait', 'legende', 'cote', 'get_extrait', 'get_date', 'get_periode', 'image_format','lien_telechargement', 'mode', 'resolution', 'photographie_type', 'credit', 'n_cliche_numerique', 'n_cliche_photo')
     list_filter = ('fk_extrait_de__categorie', 'fk_extrait_de__periode_creation')
     search_fields = ['legende', 'cote', 'n_cesr', 'fk_extrait_de__extrait_de_nom', 'fk_departement__departement_nom', 'fk_departement__fk_institution__institution_nom']
     search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, son numéro d\'inventaire, le nom du support, le nom du département de collection ou le nom de l\'institution'
+    ordering = ['n_cesr']
 
     def get_description_extrait(self, obj):
         return obj.description[:75] + '...' if obj.description and len(obj.description) > 75 else obj.description
@@ -92,6 +93,8 @@ class MotCleAdmin(admin.ModelAdmin):
     list_display = ('mot_cle_libelle', 'mot_cle_type')
     list_filter = ('mot_cle_type',)
     search_fields = ('mot_cle_libelle', 'mot_cle_type',)
+    ordering = ['mot_cle_libelle']
+    
 class ExtraitDeAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Description technique du support d\'une image', {
@@ -106,7 +109,7 @@ class ExtraitDeAdmin(admin.ModelAdmin):
     search_fields = ['extrait_de_nom']
     search_help_text = 'La recherche porte sur le nom du support, sa catégorie, etc.'
     inlines = [IntExtraitDeAuteurInLine, IntExtraitDeTechniqueInLine]
-
+    ordering = ['extrait_de_nom']
 
 class InstitutionAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -118,7 +121,7 @@ class InstitutionAdmin(admin.ModelAdmin):
     list_filter = ('pays', 'ville')
     search_fields = ['institution_nom', 'pays', 'ville']
     search_help_text = 'La recherche porte sur le nom de l\'institution, sa localisation, etc.'
-
+    ordering = ['institution_nom']
 
 class DepartementCollectionAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -141,6 +144,7 @@ class DonneesBiblioAdmin(admin.ModelAdmin):
     )
     list_display = ('ref_biblio', 'edition')
     search_fields = ('ref_biblio', 'edition')
+    ordering = ['ref_biblio']
 
 
 class PhotographeAdmin(admin.ModelAdmin):
@@ -151,6 +155,7 @@ class PhotographeAdmin(admin.ModelAdmin):
     )
     list_display = ('photographe_nom', 'photographe_prenom', 'agence')
     search_fields = ('photographe_nom', 'photographe_prenom', 'agence')
+    ordering = ['photographe_nom']
 
 class EcoleAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -160,6 +165,7 @@ class EcoleAdmin(admin.ModelAdmin):
     )
     list_display = ('ecole',)
     search_fields = ('ecole',)
+    
 
 class LieuActiviteAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -180,6 +186,7 @@ class AuteurAdmin(admin.ModelAdmin):
     list_display = ('auteur_nom', 'auteur_prenom', 'pseudonyme')
     search_fields = ('auteur_nom', 'auteur_prenom', 'pseudonyme')
     inlines = [IntAuteurEcoleInLine, IntAuteurLieuActiviteInLine]
+    ordering = ['auteur_nom']
 
 class IntAuteurEcoleInLine(admin.TabularInline):
     model = IntAuteurEcole
