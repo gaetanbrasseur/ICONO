@@ -21,7 +21,7 @@ def resultats(request):
     images = Image.objects.all()
     param_image = request.POST.get('image')
     images = images.filter(
-        Q(commentaire__icontains=param_image)
+        Q(description__icontains=param_image)
     )
     context = {
         'images' : images,

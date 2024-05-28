@@ -1,14 +1,20 @@
 /* éléments principaux */
 
 root {
-    --principalcolor : #033A29;
+    --principalcolor : #034F38;
+    --secondarycolor : #033A29;
 }
+
 * {
     margin: 0;
   }
 
 html, body {
     height: 100%;
+  }
+
+main {
+    min-height: 100%;
   }
 
 footer {
@@ -21,14 +27,28 @@ footer {
     margin-left: 20px;
 }
 
-.text-color-ric {
-    color: var(--principalcolor);
+
+.btn-ric {
+    background-color: #034F38;
+    color: white;
+    border-color: #034F38;
+}
+
+.btn-ric:hover {
+    background-color: #033A29;
+    color: white;
+    border-color: #033A29;
 }
 
 .custom-line {
     margin-bottom: 0.5rem;
     height: 14rem;
 }
+
+.image_pop-up {
+    cursor: pointer;
+}
+
 
 /* Fonts */
 
@@ -44,6 +64,12 @@ footer {
     font-weight: 400;
 }
 
+@font-face {
+    font-family: Courgette;
+    src: url("../fonts/Courgette-Regular.ttf");
+    font-weight: 500;
+}
+
 .rubiklight {
     font-family: "Rubik", sans-serif;
     font-weight: 300;
@@ -52,6 +78,12 @@ footer {
 .rubikregular {
     font-family: "Rubik", sans-serif;
     font-weight: 400;
+  }
+
+.courgette {
+    font-family: "Courgette", cursive;
+    font-weight: 400;
+    font-style: normal;
   }
 
 /* Font size */

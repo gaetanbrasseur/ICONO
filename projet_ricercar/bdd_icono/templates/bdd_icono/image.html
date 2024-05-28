@@ -1,34 +1,93 @@
 {% extends "bdd_icono/base.html" %}
 
 {% block contenu %}
-<h5>
-  </h5>
-  <div class="row">
-    <div class="col">
-      <div class="card">
-        
-        <p>Commentaire : {{image.commentaire}}</p>
-        <p>Légende : {{image.legende}}</p>
-        <p>Description : {{image.description}}</p>
-        {% comment %} <p>{{image.existe_en_physique}}</p> {% endcomment %}
-        <p>Numéro d'inventaire : {{image.n_inventaire}}</p>
-        <p>Numéro d'inventaire CESR : {{image.n_cesr}}</p>
-        <p>Format de l'image : {{image.image_format}}</p>
-        <p>Couleur : {{image.couleur}}</p>
-        <p>Résolution de l'image : {{image.resolution}}</p>
-        <p>Type de photographie : {{image.photographie_type}}</p>
-        <p>Crédits : {{image.credit}}</p>
-        <p>Lien de téléchargement : {{image.lien_telechargement}}</p>
-        <p>Numéro de cliché numértique : {{image.n_cliche_numerique}}</p>
-        <p>Numéro de cliché photo : {{image.n_cliche_photo}}</p>
-        <p>Photographe : {{image.fk_photographe.auteur_nom}}</p>
-        <p>Dépratement de collection : {{image.fk_departement.departement_nom}}</p>
-        <p>Support : {{image.fk_support.support_nom}}</p>
-        <p>Thème : {{image.theme.theme_libelle}}</p>
-        <p>Mot clés : {{image.motCle.mot_cle_libelle}} ({{image.motCle.mot_cle_type}})</p>
-        <p>Données bibliographiques : {{image.donneesBiblio.ref_biblio}}</p>
+
+<div class="modal" id="Modal_for_image" tabindex="-1" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{image.n_cesr}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img id="Image_in_modal" src="" class="img-fluid" alt="Affichage en grand de {{image.n_cesr}}">
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-ric" href="{{ image.permalien }}" target="_blank">Lien vers l'originale</a>
+        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">Fermer</button>
       </div>
     </div>
   </div>
-  
+</div>
+
+<div class="row">
+  <div class="col-4">
+    <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="mt-2 img-thumbnail image_pop-up " width="100%" data-bs-toggle="modal" data-bs-target="#Modal_for_image" data-bs-image-src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg">
+  </div>
+  <div class="col">
+    <div class="card m-2">
+      <div class="card-body">
+        <div class="d-flex w-100 justify-content-between flex-wrap">
+          <h4 class="card-title">Lieu de conservation</h4>
+        </div>
+        <div class="mt-2">
+          <dl>
+            <dt>Institution : <span class="rubiklight">{{image.fk_departement.fk_institution.institution_nom}}</span></dt>
+            <dt>Fonds Département de collection : <span class="rubiklight">{{image.fk_departement.departement_nom}}</span></dt>
+            <dt>Cote : <span class="rubiklight">{{image.cote}}</span></dt>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card m-2">
+        <div class="card-body">
+          <div class="d-flex w-100 justify-content-between flex-wrap">
+            <h4 class="card-title">Oeuvre</h4>
+          </div>
+          <div class="mt-2">
+            <dl>
+              <dt>Auteur(s) :<span class="rubiklight">{{image.fk_extrait_de.fk_auteur.auteur_nom}}</span></dt>
+              <dt>Lieu : <span class="rubiklight">{{image.fk_extrait_de.fk_auteur.lieux_activites}}</span></dt>
+              <dt>Légende : <span class="rubiklight">{{image.legende}}</span></dt>
+              <dt>Extrait de : <span class="rubiklight">{{image.fk_extrait_de.extrait_de_nom}}</span></dt>
+              <dt>Date : <span class="rubiklight">{{image.fk_extrait_de.date_creation}}</span></dt>
+              <dt>Période : <span class="rubiklight">{{image.fk_extrait_de.periode_creation}}</span></dt>
+              <dt>Technique : <span class="rubiklight">{{image.technique_libelle}}</span></dt>
+              <dt>Catégorie : <span class="rubiklight">{{image.fk_extrait_de.categorie}}</span></dt>
+              <dt>Description : <span class="rubiklight">{{image.description}}</span></dt>
+              <dt>Instruments : <span class="rubiklight">{{image.mot_cle_libelle}}</span></dt>
+              <dt>Mots clés : <span class="rubiklight">{{image.mot_cle_libelle}}</span></dt>
+              <dt>Thème : <span class="rubiklight"></span>{{image.themes.fk_theme.theme_libelle}}</dt>
+              <dt>Références bibliographiques : <span class="rubiklight">{{image.donnees_biblio.ref_biblio}}</span></dt>
+              <dt>Ref. Collection Épitome : <span class="rubiklight">{{image.donnees_biblio.edition}}</span></dt>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card m-2">
+        <div class="card-body">
+          <div class="d-flex w-100 justify-content-between flex-wrap">
+            <h4 class="card-title">Références Photographiques</h4>
+          </div>
+          <div class="mt-2">
+            <dl>
+              <dt>Photographe ou Agence : <span class="rubiklight">{{image.fk_photographe.photographe_nom}}</span></dt>
+              <dt>Type : <span class="rubiklight">{{image.photographie_type}}</span></dt>
+              <dt>Mode : <span class="rubiklight">{{image.mode}}</span></dt>
+              <dt>Résolution : <span class="rubiklight">{{image.resolution}}</span></dt>
+              <dt>Format : <span class="rubiklight">{{image.image_format}}</span></dt>
+              <dt>Crédit : <span class="rubiklight">{{image.credit}}</span></dt>
+              <dt>Permalien : <span class="rubiklight"><a href="{{image.permalien}}" target="_blank">{{image.permalien}}</a></span></dt>
+              <dt>N° doc CESR : <span class="rubiklight">{{image.n_cesr}}</span></span></dt>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
