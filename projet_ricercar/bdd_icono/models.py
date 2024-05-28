@@ -63,7 +63,7 @@ class Image(models.Model):
             models.UniqueConstraint(fields=['n_cesr'], name='unique_n_cesr'),
             models.UniqueConstraint(fields=['lien_telechargement'], name='unique_lien_telechargement')
         ]
-    
+
 
 class Photographe(models.Model):
     photographe_nom = models.CharField(max_length=150, null=True, blank=True, verbose_name="Nom du photographe")
@@ -78,7 +78,7 @@ class Photographe(models.Model):
         nom = self.photographe_nom if self.photographe_nom else ""
         prenom = self.photographe_prenom if self.photographe_prenom else ""
         return f"{prenom} {nom} - {self.agence}".strip(" -")
-
+    
 
 class DepartementCollection(models.Model):
     departement_nom = models.CharField(max_length=30, null=True, blank=True, verbose_name='Nom du département de collection')
@@ -99,6 +99,9 @@ class Theme(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['theme_libelle'], name='unique_theme_libelle')]
 
+    def __str__(self):
+        return self.theme_libelle
+    
 class ExtraitDe(models.Model):
     extrait_de_nom = models.CharField(max_length=150, null=False, blank=False, verbose_name='Nom de l\'extrait')
     categorie = models.CharField(max_length=40, null=False, blank=False, verbose_name='Catégorie', help_text='Catégorie de l\'extrait (manuscrit, tableau, etc.)')
@@ -128,7 +131,10 @@ class DonneesBiblio(models.Model):
         verbose_name_plural = 'Références bibliographiques'
         constraints = [
             models.UniqueConstraint(fields=['ref_biblio'], name='unique_ref_biblio')]
-        
+    
+    def __str__(self):
+        return self.ref_biblio
+    
 class Institution(models.Model):
     institution_nom = models.CharField(max_length=50, null=False, blank=False, verbose_name="Nom de l'institution")
     pays = models.CharField(max_length=30, null=False, blank=False)
@@ -138,7 +144,10 @@ class Institution(models.Model):
         ordering = ['institution_nom']
 
     def __str__(self):
-        return self.institution_nom
+        institution_nom = self.institution_nom if self.institution_nom else ""
+        pays = self.pays if self.pays else ""
+        ville = self.ville if self.ville else ""
+        return f"{institution_nom} : {pays} - {ville}".strip(" -")
 
 class MotCle(models.Model):
     mot_cle_libelle = models.CharField(max_length=20, null=False, blank=False, verbose_name='Libellé du mot clé')
@@ -169,6 +178,8 @@ class Auteur(models.Model):
         ordering = ['auteur_nom', 'auteur_prenom']
         verbose_name = 'Auteur.e'
         verbose_name_plural = 'Auteur.e.s'
+    def __str__(self):
+        return self.auteur_nom
 
 class Ecole(models.Model):
     ecole = models.CharField(max_length=80, null=False, blank=False)
