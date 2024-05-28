@@ -17,57 +17,63 @@
   <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
     integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
     async></script>
+  <script src="{% static 'bdd_icono/js/icono_ricercar.js' %}"></script>
 </head>
 
 <body class="mb-4 rubiklight ">
-  <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm p-3 mb-5 ">
-    <div class="container-fluid">
-      <a href="{% url 'home' %}">
-        <img src="{% static 'bdd_icono/img/logo.png' %}" class=" img-fluid" width="320px" alt="Logo Ricercar Icono">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-        aria-controls="#navbar" aria-expanded="false" aria-label="Ouvrir et fermer la navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-center rubikregular" id="navbar">
-        <ul class="nav navbar-nav me-auto nav-text-size">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'home'%}">Accueil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'in_progress' %}">Rechercher</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="{% url 'in_progress' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Explorer
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'in_progress' %}">Connexion</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin:index' %}" aria-label="Back Office">Back office</a>
-          </li>
-        </ul>
+  <main>
+    <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm p-3 mb-5 ">
+      <div class="container-fluid">
+        <div class="m-2">
+          <a href="{% url 'home' %}">
+            <img src="{% static 'bdd_icono/img/logo.png' %}" class=" img-fluid" width="320px" alt="Logo Ricercar Icono">
+          </a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+          aria-controls="#navbar" aria-expanded="false" aria-label="Ouvrir et fermer la navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center rubikregular" id="navbar">
+          <ul class="nav navbar-nav nav-text-size me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home'%}">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'in_progress' %}">Rechercher</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="{% url 'in_progress' %}" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Explorer
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'in_progress' %}">Connexion</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:index' %}" aria-label="Back Office">Back office</a>
+            </li>
+          </ul>
+        </div>
       </div>
+    </nav>
+
+    <div class="container">
+      {%block contenu%}
+
+      {%endblock%}
     </div>
-  </nav>
-
-  <div class="container">
-    {%block contenu%}
-
-    {%endblock%}
-  </div>
-  <footer class="d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark">
+  </main>
+  <footer class="d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark position-static">
     <div class="row">
       <a class="col-2 mt-1" href="https://ricercar-tours.fr/" target="_blank" style="margin-left: 20px ;">
         <img src="{% static 'bdd_icono/img/logo_ricercar_lab.png' %}" class="img-fluid" alt="Logo Ricercar">
       </a>
       <a class="col-2" href="https://cesr.cnrs.fr/">
-        <img src="https://ricercar-tours.fr/wp-content/uploads/2018/01/cesr.png" target="_blank" class="img-fluid" width="150px"
-          alt="Logo CESR">
+        <img src="https://ricercar-tours.fr/wp-content/uploads/2018/01/cesr.png" target="_blank" class="img-fluid"
+          width="150px" alt="Logo CESR">
       </a>
       <ul class="nav mt-2 col-md-4 justify-content-end nav-text-size">
         <li class="nav-item">
@@ -78,6 +84,8 @@
         </li>
       </ul>
     </div>
+
   </footer>
 </body>
+
 </html>

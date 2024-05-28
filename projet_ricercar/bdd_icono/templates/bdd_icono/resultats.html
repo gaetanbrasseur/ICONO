@@ -5,29 +5,35 @@
 {%if param != '' %}
 {{images.count}} Resultats pour : {{param}}
 {%endif%}
-<div class="row">
-  <div class="col-2"></div>
-  <div class="col display-3 text-color-ric"><u>Résultats</u></div>
+<div class="container">
+  <h1 class="text-center courgette">Résultats</h1>
 </div>
 <br>
-{% for image in images %}
-<div class="row justify-content-center custom-line">
-  <div class="col-2 bg-dark border rounded mx-1">
-    <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" width="100%">
+<div class="container my-4">
+  {% for image in images %}
+  <div class="row justify-content-center align-items-start mb-2">
+    <div class="col-md-2 m-2 border rounded bg-dark">
+      <a href="{% url 'image' image.id %}"><img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="img-fluid"
+        alt="Image {{ image.n_cesr }}"></a>
+      
+    </div>
+    <div class="col-md-5 m-2 p-2 bg-light border rounded d-flex flex-column justify-content-between">
+      <div>
+        <p>
+          <strong>Cote :</strong>{{ image.cote }}<br>
+        <strong>Auteur(s) :</strong>{{ image.fk_extrait_de.fk_auteur.auteur_nom }}<br>
+        <strong>Légende :</strong> {{ image.legende }}<br>
+        <strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}</p>
+      </div>
+      <div>
+        <a class="btn btn-ric" href="{% url 'image' image.id %}">Voir l'image</a>
+      </div>
+    </div>
   </div>
-  <div class="col-5 bg-light border rounded">
-      <h5 class="card-title">{{ image.n_cesr }}</h5>
-      <dl>
-        <dt class="font-weight-bold text-color-ric">Auteur : {{ image.fk_support.fk_auteur.auteur_nom }}</dt>
-        <dt>Légende : {{ image.legende }}</dt>
-        <dt>Description : {{ image.description }}</dt>
-        <dt>Date : {{ image.fk_support.date_creation }}</dt>
-        <dt>Mots-clés : {{ image.motCle.mot_cle_libelle }}</dt>
-      </dl>
-      <a class="btn btn-info" href="{% url 'image' image.id %}">Voir l'image</a>
-  </div>
+  {% endfor %}
 </div>
-{% endfor %}
+
+
 {% comment %} {%if images.paginator.num_pages > 1 %}
 <div class="pagination">
   <span class="step-links">
