@@ -20,9 +20,9 @@
   <script src="{% static 'bdd_icono/js/icono_ricercar.js' %}"></script>
 </head>
 
-<body class="mb-4 rubiklight ">
+<body class="rubiklight ">
   <main>
-    <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm p-3 mb-5 ">
+    <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm p-3 ">
       <div class="container-fluid">
         <div class="m-2">
           <a href="{% url 'home' %}">
@@ -60,11 +60,11 @@
       </div>
     </nav>
 
-    <div class="container">
+    
       {%block contenu%}
 
       {%endblock%}
-    </div>
+    
   </main>
   <footer class="d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark position-static">
     <div class="row">
