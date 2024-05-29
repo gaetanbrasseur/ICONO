@@ -6,24 +6,27 @@
 {{images.count}} Resultats pour : {{param}}
 {%endif%}
 <div class="container">
-  <h1 class="text-center courgette">Résultats</h1>
+  <div class="mt-5">
+    <h1 class="text-center courgette">Résultats</h1>
+  </div>
 </div>
 <br>
 <div class="container my-4">
   {% for image in images %}
   <div class="row justify-content-center align-items-start mb-2">
     <div class="col-md-2 m-2 border rounded bg-dark">
-      <a href="{% url 'image' image.id %}"><img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="img-fluid"
-        alt="Image {{ image.n_cesr }}"></a>
-      
+      <a href="{% url 'image' image.id %}"><img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg"
+          class="img-fluid" alt="Image {{ image.n_cesr }}"></a>
+
     </div>
     <div class="col-md-5 m-2 p-2 bg-light border rounded d-flex flex-column justify-content-between">
       <div>
         <p>
           <strong>Cote :</strong>{{ image.cote }}<br>
-        <strong>Auteur(s) :</strong>{{ image.fk_extrait_de.fk_auteur.auteur_nom }}<br>
-        <strong>Légende :</strong> {{ image.legende }}<br>
-        <strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}</p>
+          <strong>Auteur(s) :</strong>{{ image.fk_extrait_de.fk_auteur.auteur_nom }}<br>
+          <strong>Légende :</strong> {{ image.legende }}<br>
+          <strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}
+        </p>
       </div>
       <div>
         <a class="btn btn-ric" href="{% url 'image' image.id %}">Voir l'image</a>
