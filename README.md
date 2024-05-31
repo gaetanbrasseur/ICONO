@@ -46,3 +46,13 @@ MOT_CLE_TYPE_CHOICES = [
     ('chant', 'Chant'),
     ('instrument', 'Instrument de musique'),
 ]
+
+A la suite, ajouter pour les connexions :
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = '/'  
+LOGOUT_REDIRECT_URL = '/'  
+
+
