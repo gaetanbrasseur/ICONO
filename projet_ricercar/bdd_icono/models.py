@@ -71,8 +71,9 @@ class Photographe(models.Model):
     AGENCE_CHOICES = [
         ('RNM', 'RNM'),
         ('BNF', 'BNF'),
+        ('INDEPENDANT', 'Indépendant'),
     ]
-    agence = models.CharField(choices=AGENCE_CHOICES, null=False, blank=False)
+    agence = models.CharField(choices=AGENCE_CHOICES, null=False, blank=False, default = "INDEPENDANT")
 
     def __str__(self):
         nom = self.photographe_nom if self.photographe_nom else ""
