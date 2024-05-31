@@ -95,7 +95,7 @@ INSERT INTO bdd_icono_Image (id,legende,description,existe_en_physique,cote,n_ce
 
 
 DROP SEQUENCE IF EXISTS bdd_icono_Image_id_seq;
-CREATE SEQUENCE bdd_icono_Image_id_seq START WITH 71;
+CREATE SEQUENCE bdd_icono_Image_id_seq START WITH 72;
 
 
 DROP TABLE IF EXISTS bdd_icono_DepartementCollection CASCADE;
@@ -110,7 +110,7 @@ INSERT INTO bdd_icono_DepartementCollection (id,departement_nom,fk_institution_i
 
 
 DROP SEQUENCE IF EXISTS bdd_icono_DepartementCollection_id_seq;
-CREATE SEQUENCE bdd_icono_DepartementCollection_id_seq START WITH 1;
+CREATE SEQUENCE bdd_icono_DepartementCollection_id_seq START WITH 2;
 
 
 DROP TABLE IF EXISTS bdd_icono_ExtraitDe CASCADE;
@@ -180,7 +180,7 @@ INSERT INTO bdd_icono_ExtraitDe (id,extrait_de_nom,categorie,date_creation,perio
 
 
 DROP SEQUENCE IF EXISTS bdd_icono_ExtraitDe_id_seq;
-CREATE SEQUENCE bdd_icono_ExtraitDe_id_seq START WITH 54;
+CREATE SEQUENCE bdd_icono_ExtraitDe_id_seq START WITH 55;
 
 
 DROP TABLE IF EXISTS bdd_icono_Theme CASCADE;
@@ -229,7 +229,7 @@ INSERT INTO bdd_icono_Theme (id,theme_libelle) VALUES
 ('37','Société, civilisation et culture, vie communautaire');
 
 DROP SEQUENCE IF EXISTS bdd_icono_Theme_id_seq;
-CREATE SEQUENCE bdd_icono_Theme_id_seq START WITH 37;
+CREATE SEQUENCE bdd_icono_Theme_id_seq START WITH 38;
 
 
 DROP TABLE IF EXISTS bdd_icono_Technique CASCADE;
@@ -272,7 +272,7 @@ INSERT INTO bdd_icono_Technique (id,technique_libelle) VALUES
 
 
 DROP SEQUENCE IF EXISTS bdd_icono_Technique_id_seq;
-CREATE SEQUENCE bdd_icono_Technique_id_seq START WITH 30;
+CREATE SEQUENCE bdd_icono_Technique_id_seq START WITH 31;
 
 
 DROP TABLE IF EXISTS bdd_icono_DonneesBiblio CASCADE;
@@ -287,7 +287,7 @@ INSERT INTO bdd_icono_DonneesBiblio (id,ref_biblio,edition) VALUES
 
 
 DROP SEQUENCE IF EXISTS bdd_icono_DonneesBiblio_id_seq;
-CREATE SEQUENCE bdd_icono_DonneesBiblio_id_seq START WITH 1;
+CREATE SEQUENCE bdd_icono_DonneesBiblio_id_seq START WITH 2;
 
 
 DROP TABLE IF EXISTS bdd_icono_Institution CASCADE;
@@ -1059,7 +1059,7 @@ INSERT INTO bdd_icono_MotCle (id,mot_cle_libelle,mot_cle_type) VALUES
 
 
 DROP SEQUENCE IF EXISTS bdd_icono_MotCle_id_seq;
-CREATE SEQUENCE bdd_icono_MotCle_id_seq START WITH 733;
+CREATE SEQUENCE bdd_icono_MotCle_id_seq START WITH 734;
 
 
 DROP TABLE IF EXISTS bdd_icono_Photographe CASCADE;
@@ -1190,7 +1190,7 @@ INSERT INTO bdd_icono_intImageDonneesBiblio (id,fk_image_id,fk_donnees_biblio_id
 ('70','71','1');
 
 DROP SEQUENCE IF EXISTS bdd_icono_intImageDonneesBiblio_id_seq;
-CREATE SEQUENCE bdd_icono_intImageDonneesBiblio_id_seq START WITH 70;
+CREATE SEQUENCE bdd_icono_intImageDonneesBiblio_id_seq START WITH 71;
 
 
 DROP TABLE IF EXISTS bdd_icono_intImageMotCle CASCADE;
@@ -1205,7 +1205,7 @@ INSERT INTO bdd_icono_intImageMotCle (id,fk_image_id,fk_mot_cle_id) VALUES
 ('2','2','457');
 
 DROP SEQUENCE IF EXISTS bdd_icono_intImageMotCle_id_seq;
-CREATE SEQUENCE bdd_icono_intImageMotCle_id_seq START WITH 2;
+CREATE SEQUENCE bdd_icono_intImageMotCle_id_seq START WITH 3;
 
 
 DROP TABLE IF EXISTS bdd_icono_intImageTheme CASCADE;
