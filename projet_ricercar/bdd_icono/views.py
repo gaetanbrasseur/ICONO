@@ -1,8 +1,11 @@
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from bdd_icono.models import Image
 from django.views import generic
+import os
 
 def home(request):
     from bdd_icono.forms import FormulaireRecherche
@@ -42,3 +45,18 @@ def image(request, id_image):
     }
 
     return render(request, 'bdd_icono/image.html', context)
+
+@login_required
+def download_image(request, image_id):
+    image = get_object_or_404(Image, id=image_id)
+    file_path = image.lien_telechargement.path
+
+    if not os.path.exists(file_path):
+        raise Http404("Le fichier spécifié est introuvable.")
+    
+    try:
+        response = FileResponse(open(file_path, 'rb'), content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+        return response
+    except Exception as e:
+        raise Http404(f"Erreur lors de la tentative de téléchargement : {e}")
