@@ -1,7 +1,6 @@
 {% extends "bdd_icono/base.html" %}
 
 {% block contenu %}
-
 <div class="modal" id="Modal_for_image" tabindex="-1" >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -14,7 +13,7 @@
       </div>
       <div class="modal-footer">
         <a type="button" class="btn btn-ric" href="{{ image.permalien }}" target="_blank">Lien vers l'originale</a>
-        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close">Fermer</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Fermer</button>
       </div>
     </div>
   </div>
@@ -22,7 +21,7 @@
 
 <div class="row mt-5">
   <div class="col-4">
-    <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="mt-2 img-thumbnail image_pop-up " width="100%" data-bs-toggle="modal" data-bs-target="#Modal_for_image" data-bs-image-src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg">
+    <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="mt-2 img-thumbnail image_pop-up" width="100%" data-bs-toggle="modal" data-bs-target="#Modal_for_image" data-bs-image-src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg">
   </div>
   <div class="col">
     <div class="card m-2">
@@ -58,30 +57,19 @@
               <dt>Description : <span class="rubiklight">{{image.description}}</span></dt>
               <dt>Instruments : <span class="rubiklight">{{image.mot_cle_libelle}}</span></dt>
               <dt>Mots clés : <span class="rubiklight">{{image.mot_cle_libelle}}</span></dt>
-              <dt>Thème : <span class="rubiklight"></span>{{image.themes.fk_theme.theme_libelle}}</dt>
+              <dt>Thème : <span class="rubiklight">{{image.themes.fk_theme.theme_libelle}}</span></dt>
               <dt>Références bibliographiques : <span class="rubiklight">{{image.donnees_biblio.ref_biblio}}</span></dt>
               <dt>Ref. Collection Épitome : <span class="rubiklight">{{image.donnees_biblio.edition}}</span></dt>
-            </dl>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="card m-2">
-        <div class="card-body">
-          <div class="d-flex w-100 justify-content-between flex-wrap">
-            <h4 class="card-title">Références Photographiques</h4>
-          </div>
-          <div class="mt-2">
-            <dl>
-              <dt>Photographe ou Agence : <span class="rubiklight">{{image.fk_photographe.photographe_nom}}</span></dt>
-              <dt>Type : <span class="rubiklight">{{image.photographie_type}}</span></dt>
-              <dt>Mode : <span class="rubiklight">{{image.mode}}</span></dt>
-              <dt>Résolution : <span class="rubiklight">{{image.resolution}}</span></dt>
-              <dt>Format : <span class="rubiklight">{{image.image_format}}</span></dt>
-              <dt>Crédit : <span class="rubiklight">{{image.credit}}</span></dt>
-              <dt>Permalien : <span class="rubiklight"><a href="{{image.permalien}}" target="_blank">{{image.permalien}}</a></span></dt>
-              <dt>N° doc CESR : <span class="rubiklight">{{image.n_cesr}}</span></span></dt>
+              <dt>N° doc CESR : <span class="rubiklight">{{image.n_cesr}}</span></dt>
+              {% if user.is_authenticated %}
+                <dt>
+                  <a class="btn btn-primary" href="{% url 'download_image' image.id %}">Télécharger l'image en HD</a>
+                </dt>
+              {% else %}
+                <dt>
+                  <p>Vous n'êtes pas connecté, contactez le laboratoire Ricercar pour plus d'informations.</p>
+                </dt>
+              {% endif %}
             </dl>
           </div>
         </div>
@@ -89,5 +77,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
