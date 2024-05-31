@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS bdd_icono_Image CASCADE;
 CREATE TABLE bdd_icono_Image (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 legende TEXT NULL,
 description TEXT NOT NULL,
 existe_en_physique BOOLEAN NOT NULL,
@@ -93,15 +93,25 @@ INSERT INTO bdd_icono_Image (id,legende,description,existe_en_physique,cote,n_ce
 ('70',null,'Le singe,par sa similitude avec l’homme,fait partie de l’inventaire des encyclopédie de toutes les créatures du monde. Il se moque dans cette bordure marginale des instrncts corporels et animaux de l’homme : il joue de la vièle avec un soufllet à feu au lieu d’utiliser un véritable instrument mélodieux,il urine habilement dans un flacon et il lâche un pet. L’être humain crée “à l’image de Dieu” est ici tourné en dérision et renvoyé à sa part bestiale.',TRUE,'ms. 61 E,fol. 1','im_0458','tiff','Couleur','300 dpi','Numérique',null,'https://hdl.handle.net/2268.1/8262','non-renseigné',null,null,'0','0','49'),
 ('71',null,'Les ménestrels de cour,richement vêtus,sonnent de leurs trompettes,le service des plats. a la cour de bourgogne,le banquet repose sur une sorte de liturgie ritualisée dont la mise en scène sollicite aussi bien la vue que l’ouïe,l’odorat ou le goût. La musique fait partie du cérémonial de cour qui sert à impressionner les convives et donc à renforcer l’autorité ducale.',TRUE,'ms. Français 12201,fol. 10v','im_0459','tiff','Couleur','+ 600 dpi','Numérique',null,'https://gallica.bnf.fr/ark:/12148/btv1b8452199j/f30.item','non-renseigné',null,null,'0','0','19');
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_Image_id_seq;
+CREATE SEQUENCE bdd_icono_Image_id_seq START WITH 71;
+
+
 DROP TABLE IF EXISTS bdd_icono_DepartementCollection CASCADE;
 CREATE TABLE bdd_icono_DepartementCollection (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 departement_nom VARCHAR(255) NOT NULL,
 fk_institution_id BIGINT NULL
 );
 
 INSERT INTO bdd_icono_DepartementCollection (id,departement_nom,fk_institution_id) VALUES 
 ('1','Départements des Manuscrits, Division Occidentale','1');
+
+
+DROP SEQUENCE IF EXISTS bdd_icono_DepartementCollection_id_seq;
+CREATE SEQUENCE bdd_icono_DepartementCollection_id_seq START WITH 1;
+
 
 DROP TABLE IF EXISTS bdd_icono_ExtraitDe CASCADE;
 CREATE TABLE bdd_icono_ExtraitDe (
@@ -168,9 +178,14 @@ INSERT INTO bdd_icono_ExtraitDe (id,extrait_de_nom,categorie,date_creation,perio
 ('53','Traité sur la Salutation angélique','Manuscrits','1461','15e siècle'),
 ('54','Traités mystiques et sermons de Jean Gerson','Manuscrits',null,'15e siècle');
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_ExtraitDe_id_seq;
+CREATE SEQUENCE bdd_icono_ExtraitDe_id_seq START WITH 54;
+
+
 DROP TABLE IF EXISTS bdd_icono_Theme CASCADE;
 CREATE TABLE bdd_icono_Theme (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 theme_libelle VARCHAR(255) NOT NULL
 );
 
@@ -213,9 +228,13 @@ INSERT INTO bdd_icono_Theme (id,theme_libelle) VALUES
 ('36','Société, civilisation et culture, vanité'),
 ('37','Société, civilisation et culture, vie communautaire');
 
+DROP SEQUENCE IF EXISTS bdd_icono_Theme_id_seq;
+CREATE SEQUENCE bdd_icono_Theme_id_seq START WITH 37;
+
+
 DROP TABLE IF EXISTS bdd_icono_Technique CASCADE;
 CREATE TABLE bdd_icono_Technique (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 technique_libelle VARCHAR(255) NOT NULL
 );
 
@@ -251,9 +270,14 @@ INSERT INTO bdd_icono_Technique (id,technique_libelle) VALUES
 ('29','sanguine'),
 ('30','toile');
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_Technique_id_seq;
+CREATE SEQUENCE bdd_icono_Technique_id_seq START WITH 30;
+
+
 DROP TABLE IF EXISTS bdd_icono_DonneesBiblio CASCADE;
 CREATE TABLE bdd_icono_DonneesBiblio (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 ref_biblio VARCHAR(255) NOT NULL,
 edition VARCHAR(255) NULL
 );
@@ -261,9 +285,14 @@ edition VARCHAR(255) NULL
 INSERT INTO bdd_icono_DonneesBiblio (id,ref_biblio,edition) VALUES 
 ('1','non-renseigné','2007-CLOUZOT-Images_des_Musiciens');
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_DonneesBiblio_id_seq;
+CREATE SEQUENCE bdd_icono_DonneesBiblio_id_seq START WITH 1;
+
+
 DROP TABLE IF EXISTS bdd_icono_Institution CASCADE;
 CREATE TABLE bdd_icono_Institution (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 institution_nom VARCHAR(255) NOT NULL,
 pays VARCHAR(255) NOT NULL,
 ville VARCHAR(255) NULL
@@ -281,6 +310,10 @@ INSERT INTO bdd_icono_Institution (id,institution_nom,pays,ville) VALUES
 ('9','Bibliothèque municipale','France','Mâcon'),
 ('10','Bibliothèque municipale','France','Dijon'),
 ('11','Bibliothèque municipale','France','Autun');
+
+DROP SEQUENCE IF EXISTS bdd_icono_Institution_id_seq;
+CREATE SEQUENCE bdd_icono_Institution_id_seq START WITH 12;
+
 
 DROP TABLE IF EXISTS bdd_icono_MotCle CASCADE;
 CREATE TABLE bdd_icono_MotCle (
@@ -1024,148 +1057,227 @@ INSERT INTO bdd_icono_MotCle (id,mot_cle_libelle,mot_cle_type) VALUES
 ('732','Xerxès Ier','generique'),
 ('733','Zeus','generique');
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_MotCle_id_seq;
+CREATE SEQUENCE bdd_icono_MotCle_id_seq START WITH 733;
+
+
 DROP TABLE IF EXISTS bdd_icono_Photographe CASCADE;
 CREATE TABLE bdd_icono_Photographe (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 photographe_nom VARCHAR(255) NULL,
 photographe_prenom VARCHAR(255) NULL,
 agence VARCHAR(255) NOT NULL
 );
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_Photographe_id_seq;
+CREATE SEQUENCE bdd_icono_Photographe_id_seq;
+
+
 DROP TABLE IF EXISTS bdd_icono_Auteur CASCADE;
 CREATE TABLE bdd_icono_Auteur (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 auteur_nom VARCHAR(255) NOT NULL,
 auteur_prenom VARCHAR(255) NULL,
 pseudonyme VARCHAR(255) NULL
 );
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_Auteur_id_seq;
+CREATE SEQUENCE bdd_icono_Auteur_id_seq;
+
+
 DROP TABLE IF EXISTS bdd_icono_LieuActivite CASCADE;
 CREATE TABLE bdd_icono_LieuActivite (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 lieu_activite VARCHAR(255) NOT NULL
 );
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_LieuActivite_id_seq;
+CREATE SEQUENCE bdd_icono_LieuActivite_id_seq;
+
+
 DROP TABLE IF EXISTS bdd_icono_Ecole CASCADE;
 CREATE TABLE bdd_icono_Ecole (
-id BIGINT NOT NULL,
+id BIGINT PRIMARY KEY NOT NULL,
 ecole VARCHAR(255) NOT NULL
 );
 
+
+DROP SEQUENCE IF EXISTS bdd_icono_Ecole_id_seq;
+CREATE SEQUENCE bdd_icono_Ecole_id_seq;
+
+
 DROP TABLE IF EXISTS bdd_icono_intImageDonneesBiblio CASCADE;
 CREATE TABLE bdd_icono_intImageDonneesBiblio (
-fk_image BIGINT NOT NULL,
-fk_donnees_biblio BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_image_id BIGINT NOT NULL,
+fk_donnees_biblio_id BIGINT NOT NULL
 );
 
-INSERT INTO bdd_icono_intImageDonneesBiblio (fk_image,fk_donnees_biblio) VALUES
-('1','1'),
-('2','1'),
-('3','1'),
-('4','1'),
-('5','1'),
-('6','1'),
-('7','1'),
-('8','1'),
-('9','1'),
-('10','1'),
-('11','1'),
-('12','1'),
-('13','1'),
-('14','1'),
-('16','1'),
-('17','1'),
-('18','1'),
-('19','1'),
-('20','1'),
-('21','1'),
-('22','1'),
-('23','1'),
-('24','1'),
-('25','1'),
-('26','1'),
-('27','1'),
-('28','1'),
-('29','1'),
-('30','1'),
-('31','1'),
-('32','1'),
-('33','1'),
-('34','1'),
-('35','1'),
-('36','1'),
-('37','1'),
-('38','1'),
-('39','1'),
-('40','1'),
-('41','1'),
-('42','1'),
-('43','1'),
-('44','1'),
-('45','1'),
-('46','1'),
-('47','1'),
-('48','1'),
-('49','1'),
-('50','1'),
-('51','1'),
-('52','1'),
-('53','1'),
-('54','1'),
-('55','1'),
-('56','1'),
-('57','1'),
-('58','1'),
-('59','1'),
-('60','1'),
-('61','1'),
-('62','1'),
-('63','1'),
-('64','1'),
-('65','1'),
-('66','1'),
-('67','1'),
-('68','1'),
-('69','1'),
-('70','1'),
-('71','1');
+INSERT INTO bdd_icono_intImageDonneesBiblio (id,fk_image_id,fk_donnees_biblio_id) VALUES
+('1','1','1'),
+('2','2','1'),
+('3','3','1'),
+('4','4','1'),
+('5','5','1'),
+('6','6','1'),
+('7','7','1'),
+('8','8','1'),
+('9','9','1'),
+('10','10','1'),
+('11','11','1'),
+('12','12','1'),
+('13','13','1'),
+('14','14','1'),
+('15','16','1'),
+('16','17','1'),
+('17','18','1'),
+('18','19','1'),
+('19','20','1'),
+('20','21','1'),
+('21','22','1'),
+('22','23','1'),
+('23','24','1'),
+('24','25','1'),
+('25','26','1'),
+('26','27','1'),
+('27','28','1'),
+('28','29','1'),
+('29','30','1'),
+('30','31','1'),
+('31','32','1'),
+('32','33','1'),
+('33','34','1'),
+('34','35','1'),
+('35','36','1'),
+('36','37','1'),
+('37','38','1'),
+('38','39','1'),
+('39','40','1'),
+('40','41','1'),
+('41','42','1'),
+('42','43','1'),
+('43','44','1'),
+('44','45','1'),
+('45','46','1'),
+('46','47','1'),
+('47','48','1'),
+('48','49','1'),
+('49','50','1'),
+('50','51','1'),
+('51','52','1'),
+('52','53','1'),
+('53','54','1'),
+('54','55','1'),
+('55','56','1'),
+('56','57','1'),
+('57','58','1'),
+('58','59','1'),
+('59','60','1'),
+('60','61','1'),
+('61','62','1'),
+('62','63','1'),
+('63','64','1'),
+('64','65','1'),
+('65','66','1'),
+('66','67','1'),
+('67','68','1'),
+('68','69','1'),
+('69','70','1'),
+('70','71','1');
+
+DROP SEQUENCE IF EXISTS bdd_icono_intImageDonneesBiblio_id_seq;
+CREATE SEQUENCE bdd_icono_intImageDonneesBiblio_id_seq START WITH 70;
+
 
 DROP TABLE IF EXISTS bdd_icono_intImageMotCle CASCADE;
 CREATE TABLE bdd_icono_intImageMotCle (
-fk_image BIGINT NOT NULL,
-fk_mot_cle BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_image_id BIGINT NOT NULL,
+fk_mot_cle_id BIGINT NOT NULL
 );
 
-INSERT INTO bdd_icono_intImageMotCle (fk_image,fk_mot_cle) VALUES 
-('1','457'),
-('2','457');
+INSERT INTO bdd_icono_intImageMotCle (id,fk_image_id,fk_mot_cle_id) VALUES 
+('1','1','457'),
+('2','2','457');
+
+DROP SEQUENCE IF EXISTS bdd_icono_intImageMotCle_id_seq;
+CREATE SEQUENCE bdd_icono_intImageMotCle_id_seq START WITH 2;
+
 
 DROP TABLE IF EXISTS bdd_icono_intImageTheme CASCADE;
 CREATE TABLE bdd_icono_intImageTheme (
-fk_image BIGINT NOT NULL,
-fk_theme BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_image_id BIGINT NOT NULL,
+fk_theme_id BIGINT NOT NULL
 );
+
+DROP SEQUENCE IF EXISTS bdd_icono_intImageTheme_id_seq;
+CREATE SEQUENCE bdd_icono_intImageTheme_id_seq;
+
 
 DROP TABLE IF EXISTS bdd_icono_intExtraitDeTechnique CASCADE;
 CREATE TABLE bdd_icono_intExtraitDeTechnique (
-fk_extrait_de BIGINT NOT NULL,
-fk_technique BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_extrait_de_id BIGINT NOT NULL,
+fk_technique_id BIGINT NOT NULL
 );
+
+DROP SEQUENCE IF EXISTS bdd_icono_intExtraitDeTechnique_id_seq;
+CREATE SEQUENCE bdd_icono_intExtraitDeTechnique_id_seq;
+
 
 DROP TABLE IF EXISTS bdd_icono_intExtraitDeAuteur CASCADE;
 CREATE TABLE bdd_icono_intExtraitDeAuteur (
-fk_extrait_de BIGINT NOT NULL,
-fk_auteur BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_extrait_de_id BIGINT NOT NULL,
+fk_auteur_id BIGINT NOT NULL
 );
+
+DROP SEQUENCE IF EXISTS bdd_icono_intExtraitDeAuteur_id_seq;
+CREATE SEQUENCE bdd_icono_intExtraitDeAuteur_id_seq;
+
 
 DROP TABLE IF EXISTS bdd_icono_intAuteurEcole CASCADE;
 CREATE TABLE bdd_icono_intAuteurEcole (
-fk_auteur BIGINT NOT NULL,
-fk_ecole BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_auteur_id BIGINT NOT NULL,
+fk_ecole_id BIGINT NOT NULL
 );
+
+DROP SEQUENCE IF EXISTS bdd_icono_intAuteurEcole_id_seq;
+CREATE SEQUENCE bdd_icono_intAuteurEcole_id_seq;
+
 
 DROP TABLE IF EXISTS bdd_icono_intAuteurLieuActivite CASCADE;
 CREATE TABLE bdd_icono_intAuteurLieuActivite (
-fk_auteur BIGINT NOT NULL,
-fk_lieu_activite BIGINT NOT NULL
+id BIGINT PRIMARY KEY NOT NULL,
+fk_auteur_id BIGINT NOT NULL,
+fk_lieu_activite_id BIGINT NOT NULL
 );
+
+DROP SEQUENCE IF EXISTS bdd_icono_intAuteurLieuActivite_id_seq;
+CREATE SEQUENCE bdd_icono_intAuteurLieuActivite_id_seq;
+
+ALTER TABLE bdd_icono_Image ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Image_id_seq');
+ALTER TABLE bdd_icono_DepartementCollection ALTER COLUMN id SET DEFAULT nextval('bdd_icono_DepartementCollection_id_seq');
+ALTER TABLE bdd_icono_ExtraitDe ALTER COLUMN id SET DEFAULT nextval('bdd_icono_ExtraitDe_id_seq');
+ALTER TABLE bdd_icono_Theme ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Theme_id_seq');
+ALTER TABLE bdd_icono_Technique ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Technique_id_seq');
+ALTER TABLE bdd_icono_DonneesBiblio ALTER COLUMN id SET DEFAULT nextval('bdd_icono_DonneesBiblio_id_seq');
+ALTER TABLE bdd_icono_Institution ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Institution_id_seq');
+ALTER TABLE bdd_icono_MotCle ALTER COLUMN id SET DEFAULT nextval('bdd_icono_MotCle_id_seq');
+ALTER TABLE bdd_icono_Photographe ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Photographe_id_seq');
+ALTER TABLE bdd_icono_Auteur ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Auteur_id_seq');
+ALTER TABLE bdd_icono_LieuActivite ALTER COLUMN id SET DEFAULT nextval('bdd_icono_LieuActivite_id_seq');
+ALTER TABLE bdd_icono_Ecole ALTER COLUMN id SET DEFAULT nextval('bdd_icono_Ecole_id_seq');
+ALTER TABLE bdd_icono_intImageDonneesBiblio ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intImageDonneesBiblio_id_seq');
+ALTER TABLE bdd_icono_intImageMotCle ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intImageMotCle_id_seq');
+ALTER TABLE bdd_icono_intImageTheme ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intImageTheme_id_seq');
+ALTER TABLE bdd_icono_intExtraitDeTechnique ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intExtraitDeTechnique_id_seq');
+ALTER TABLE bdd_icono_intExtraitDeAuteur ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intExtraitDeAuteur_id_seq');
+ALTER TABLE bdd_icono_intAuteurEcole ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intAuteurEcole_id_seq');
+ALTER TABLE bdd_icono_intAuteurLieuActivite ALTER COLUMN id SET DEFAULT nextval('bdd_icono_intAuteurLieuActivite_id_seq');
