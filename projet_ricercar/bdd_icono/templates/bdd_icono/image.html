@@ -63,7 +63,7 @@
               <dt>N° doc CESR : <span class="rubiklight">{{image.n_cesr}}</span></dt>
               {% if user.is_authenticated %}
                 <dt>
-                  <a class="btn btn-primary" href="{% url 'download_image' image.id %}">Télécharger l'image en HD</a>
+                  <a class="btn btn-ric" href="{% url 'download_image' image.id %}">Télécharger l'image en HD</a>
                 </dt>
               {% else %}
                 <dt>
