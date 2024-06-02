@@ -19,17 +19,18 @@ class IntExtraitDeTechniqueInLine(admin.StackedInline):
 
 class IntImageDonneesBiblioInLine(admin.StackedInline):
     model = IntImageDonneesBiblio
-
+    autocomplete_fields = ['fk_donnees_biblio']
+    extra = 1
 
 class IntImageMotCleInLine(admin.StackedInline):
     model = IntImageMotCle
     autocomplete_fields = ['fk_mot_cle']
-    extra = 0
+    extra = 1
 
 class IntImageThemeInLine(admin.StackedInline):
     model = IntImageTheme
     autocomplete_fields = ['fk_theme']
-    extra = 0
+    extra = 1
 
 
 class IntAuteurEcoleInLine(admin.StackedInline):
@@ -47,11 +48,11 @@ class ImageAdmin(admin.ModelAdmin):
             'fields': ('n_cesr', 'existe_en_physique', 'mode', 'resolution', 'photographie_type', 'credit', 'permalien', 'lien_telechargement', 'n_cliche_numerique', 'n_cliche_photo', 'fk_photographe')
         }),
         ('Information sur l\'image', {
-            'fields': ('legende', 'description', 'fk_extrait_de', 'fk_departement', 'cote')
+            'fields': ('description', 'legende',  'fk_extrait_de', 'cote' ,'fk_departement', )
         })
     )
     autocomplete_fields = ['mots_cles', 'themes', 'fk_photographe', 'fk_extrait_de', 'fk_departement']
-    inlines = [IntImageMotCleInLine, IntImageThemeInLine]
+    inlines = [IntImageMotCleInLine, IntImageThemeInLine, IntImageDonneesBiblioInLine]
     list_display = ('n_cesr','get_description_extrait', 'legende', 'cote', 'get_extrait', 'get_date', 'get_periode', 'image_format','lien_telechargement', 'mode', 'resolution', 'photographie_type', 'credit', 'n_cliche_numerique', 'n_cliche_photo')
     list_filter = ('fk_extrait_de__categorie', 'fk_extrait_de__periode_creation')
     search_fields = ['legende', 'cote', 'n_cesr', 'fk_extrait_de__extrait_de_nom', 'fk_departement__departement_nom', 'fk_departement__fk_institution__institution_nom']
@@ -97,7 +98,7 @@ class MotCleAdmin(admin.ModelAdmin):
     
 class ExtraitDeAdmin(admin.ModelAdmin):
     fieldsets = (
-        ('Description technique du support d\'une image', {
+        ('Description technique de l\'extrait d\'une image', {
             'fields': ('extrait_de_nom', 'categorie')
         }),
         ('Informations historiques et iconographiques', {
