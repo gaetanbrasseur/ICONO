@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+import re
+from django.utils.translation import gettext_lazy as _
 
 def upload_location(instance, filename):
     filebase, extension = filename.split('.')
@@ -8,22 +10,22 @@ def upload_location(instance, filename):
 
 class Image(models.Model):
     legende = models.TextField(null=True, blank=True, verbose_name='Légende')
-    description = models.TextField(null=False, blank=False,verbose_name='Description libre')
+    description = models.TextField(null=False, blank=False,verbose_name='Description libre', help_text='Indiquez une description de l\'image')
     existe_en_physique = models.BooleanField(null=False, blank=False, default=True)
-    cote = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Cote')
+    cote = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Cote', help_text='Indiquez la cote, en cas d\'image provenant d\'extrait pouvant être catalogué (manuscrit, livre, lettre, acte officiel etc.)')
     n_cesr = models.CharField(max_length=150, null=False, blank=False, verbose_name = 'numéro de document CESR', help_text=' Format : im_0000')
     image_format = models.CharField(null=False, blank=False, verbose_name="Format de l'image", editable=False)
     mode = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc'),('NR','Non-renseigné')], null=False, blank=False,default='Couleur', verbose_name='Mode')
-    resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution')
+    resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution', help_text='Indiquez la résolution de l\'image en DPI.')
     photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default='numerique', null=False, blank=False, verbose_name="Type de photographie")
-    credit = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Crédit")
+    credit = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Crédit", help_text='Indiquez les crédits relatifs à la photographie.')
     lien_telechargement = models.ImageField(upload_to=upload_location, null=False, blank=False, verbose_name='Dépôt du fichier image', help_text='Les images doivent être de format TIFF ou JPEG.')
-    permalien = models.CharField(max_length=250, null=True, blank=True,)
+    permalien = models.CharField(max_length=250, null=True, blank=True, help_text='Indiquez ici un lien vers le site de l\'institution qui fournit la photographie.')
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Numéro de cliché numérique")
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True,  verbose_name = "Numéro de cliché physique")
     fk_photographe = models.ForeignKey('Photographe', on_delete=models.CASCADE, null=False, blank=False, verbose_name="Photographe")
     fk_departement = models.ForeignKey('DepartementCollection', on_delete=models.CASCADE, null=False, blank=False, verbose_name="Département de collection")
-    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Extrait de")
+    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Extrait", help_text='Indiquez la provenance de l\'image.')
     themes = models.ManyToManyField('Theme', through='IntImageTheme')
     mots_cles = models.ManyToManyField('MotCle', through='IntImageMotCle')
     donnees_biblio = models.ManyToManyField('DonneesBiblio', through='IntImageDonneesBiblio')
@@ -78,6 +80,10 @@ class Image(models.Model):
             models.UniqueConstraint(fields=['n_cesr'], name='unique_n_cesr'),
             models.UniqueConstraint(fields=['lien_telechargement'], name='unique_lien_telechargement')
         ]
+        verbose_name = 'Image'
+
+    def __str__(self):
+        return f'{self.n_cesr}'
 
 
 class Photographe(models.Model):
@@ -118,11 +124,35 @@ class Theme(models.Model):
     def __str__(self):
         return self.theme_libelle
     
+def validation_date_creation(value):
+    """
+    Validation du champ date_creation.
+    Format accepté : AAAA, Avant AAAA, Vers AAAA, Après AAAA, AAAA - AAAA, Vers AAAA - AAAA
+    """
+    pattern = re.compile(r'^(Avant|Vers|Après )?\d{3,4}( - \d{3,4})?$')
+    if not pattern.match(value):
+        raise ValidationError(
+            ('Format de date invalide. Utilisez : "AAAA", "Avant AAAA", "Vers AAAA", "Après AAAA", "AAAA - AAAA", "Vers AAAA - AAAA".'),
+            params={'value': value},
+        )
+
+def validation_periode_creation(value):
+    """
+    Validation du champ periode_creation.
+    Format accepté : X e Siècle, Avant X e Siècle, Vers X e Siècle, Après X e Siècle, X e Siècle - Y e Siècle
+    """
+    pattern = re.compile(r'^(Avant|Vers|Après )?\d{1,2}e Siècle( - \d{1,2}e Siècle)?$')
+    if not pattern.match(value):
+        raise ValidationError(
+            _('Format de période invalide. Utilisez : "X e Siècle", "Avant X e Siècle", "Vers X e Siècle", "Après X e Siècle", "X e Siècle - Y e Siècle".'),
+            params={'value': value},
+        )
+
 class ExtraitDe(models.Model):
     extrait_de_nom = models.CharField(max_length=150, null=False, blank=False, verbose_name='Nom de l\'extrait')
     categorie = models.CharField(max_length=40, null=False, blank=False, verbose_name='Catégorie', help_text='Catégorie de l\'extrait (manuscrit, tableau, etc.)')
-    date_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Date de création', help_text='Format : AAAA pour une année précise, AAAA - AAAA pour une plage d\'années. Préfixes possibles : Avant, Vers, Après')
-    periode_creation = models.CharField(max_length=40, null=True, blank=True, verbose_name='Période de création', help_text='Format : Siècle en chiffre, suivi de "e Siècle". Exemple : 3e Siècle, 15e Siècle, 14e Siècle - 15e Siècle')
+    date_creation = models.CharField(max_length=17, null=True, blank=True, verbose_name='Date de création', help_text='Format : AAAA pour une année précise, AAAA - AAAA pour une plage d\'années. Préfixes possibles : Avant, Vers, Après', validators=[validation_date_creation])
+    periode_creation = models.CharField(max_length=23, null=True, blank=True, verbose_name='Période de création', help_text='Format : Siècle en chiffre, suivi de "e Siècle". Exemple : 3e Siècle, 15e Siècle, 14e Siècle - 15e Siècle. Préfixes possibles : Avant, Vers, Après', validators=[validation_periode_creation])
 
     def __str__(self):
         return self.extrait_de_nom
@@ -178,7 +208,9 @@ class MotCle(models.Model):
         ]
 
     def __str__(self):
-        return self.mot_cle_libelle
+        libelle = self.mot_cle_libelle if self.mot_cle_libelle else ""
+        type = self.mot_cle_type if self.mot_cle_type else ""
+        return f"{libelle} - {type}"
 
 class Auteur(models.Model):
     auteur_nom = models.CharField(max_length=40, null=False, blank=False, verbose_name='Nom', help_text='Si artiste Anonyme, indiquez Anonyme en Nom et précisez si possible son école et/ou lieu d\'activité')
@@ -198,7 +230,7 @@ class Auteur(models.Model):
         return self.auteur_nom
 
 class Ecole(models.Model):
-    ecole = models.CharField(max_length=80, null=False, blank=False)
+    ecole = models.CharField(max_length=80, null=False, blank=False, help_text='Indiquez l\'école artistique à laquelle appartient l\'auteur. Exemple : allemande, française, hollandaise...')
 
     def __str__(self):
         return self.ecole
