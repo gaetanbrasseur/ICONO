@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-import re
-from django.utils.translation import gettext_lazy as _
+from .utils import miniatures
+import os
 
 def upload_location(instance, filename):
     filebase, extension = filename.split('.')
@@ -37,7 +37,14 @@ class Image(models.Model):
   
     def save(self, *args, **kwargs):
         self.set_format()
-        super().save(force_insert=False, *args, **kwargs)
+        super().save(*args, **kwargs)
+        chemin_relatif_miniatures = 'bdd_icono/miniatures'
+        chemin_miniatures = os.path.join(settings.MEDIA_ROOT, chemin_relatif_miniatures)
+        os.makedirs(chemin_miniatures, exist_ok=True)
+        
+        print(f"Génération de miniature pour : {self.lien_telechargement.path}")
+        miniatures(self.lien_telechargement.path, chemin_miniatures)
+        super().save(*args, **kwargs)
         
         
     
@@ -80,11 +87,9 @@ class Image(models.Model):
             models.UniqueConstraint(fields=['n_cesr'], name='unique_n_cesr'),
             models.UniqueConstraint(fields=['lien_telechargement'], name='unique_lien_telechargement')
         ]
-        verbose_name = 'Image'
 
     def __str__(self):
         return f'{self.n_cesr}'
-
 
 class Photographe(models.Model):
     photographe_nom = models.CharField(max_length=150, null=True, blank=True, verbose_name="Nom du photographe")
