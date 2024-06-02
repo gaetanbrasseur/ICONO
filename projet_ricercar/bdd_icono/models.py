@@ -2,18 +2,22 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
+def upload_location(instance, filename):
+    filebase, extension = filename.split('.')
+    return 'bdd_icono/hd/%s.%s' % (instance.n_cesr, extension)
+
 class Image(models.Model):
     legende = models.TextField(null=True, blank=True, verbose_name='Légende')
     description = models.TextField(null=False, blank=False,verbose_name='Description libre')
     existe_en_physique = models.BooleanField(null=False, blank=False, default=True)
     cote = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Cote')
     n_cesr = models.CharField(max_length=150, null=False, blank=False, verbose_name = 'numéro de document CESR', help_text=' Format : im_0000')
-    image_format = models.CharField(choices=[('jpeg', 'JPEG'), ('tiff', 'TIFF'),('NR','Non-renseigné')], default='tiff', null=False, blank=False, verbose_name="Format de l'image")
+    image_format = models.CharField(null=False, blank=False, verbose_name="Format de l'image", editable=False)
     mode = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc'),('NR','Non-renseigné')], null=False, blank=False,default='Couleur', verbose_name='Mode')
     resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution')
     photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default='numerique', null=False, blank=False, verbose_name="Type de photographie")
     credit = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Crédit")
-    lien_telechargement = models.ImageField(upload_to='bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image', help_text='Les images doivent être de format TIFF ou JPEG.')
+    lien_telechargement = models.ImageField(upload_to=upload_location, null=False, blank=False, verbose_name='Dépôt du fichier image', help_text='Les images doivent être de format TIFF ou JPEG.')
     permalien = models.CharField(max_length=250, null=True, blank=True,)
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Numéro de cliché numérique")
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True,  verbose_name = "Numéro de cliché physique")
@@ -24,6 +28,17 @@ class Image(models.Model):
     mots_cles = models.ManyToManyField('MotCle', through='IntImageMotCle')
     donnees_biblio = models.ManyToManyField('DonneesBiblio', through='IntImageDonneesBiblio')
 
+    def set_format(self):
+        filebase, extension = self.lien_telechargement.path.split('.')
+        self.image_format = extension
+    
+  
+    def save(self, *args, **kwargs):
+        self.set_format()
+        super().save(force_insert=False, *args, **kwargs)
+        
+        
+    
     # def get_siecle(self):
     #     # penser à mettre un peu de doc pour expliciter les méthodes
     #     if self.fk_support and self.fk_support.date_creation:

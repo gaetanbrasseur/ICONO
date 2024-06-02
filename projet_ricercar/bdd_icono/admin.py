@@ -44,7 +44,7 @@ class IntAuteurLieuActiviteInLine(admin.StackedInline):
 class ImageAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Information sur la photographie', { 
-            'fields': ('n_cesr', 'existe_en_physique', 'image_format', 'mode', 'resolution', 'photographie_type', 'credit', 'permalien', 'lien_telechargement', 'n_cliche_numerique', 'n_cliche_photo', 'fk_photographe')
+            'fields': ('n_cesr', 'existe_en_physique', 'mode', 'resolution', 'photographie_type', 'credit', 'permalien', 'lien_telechargement', 'n_cliche_numerique', 'n_cliche_photo', 'fk_photographe')
         }),
         ('Information sur l\'image', {
             'fields': ('legende', 'description', 'fk_extrait_de', 'fk_departement', 'cote')
