@@ -13,7 +13,7 @@ class Image(models.Model):
     resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution')
     photographie_type = models.CharField(choices=[('numerique', 'Numérique'), ('photo', 'Photo'),('NR','Non-renseigné')],default='numerique', null=False, blank=False, verbose_name="Type de photographie")
     credit = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Crédit")
-    lien_telechargement = models.ImageField(upload_to='media/bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image', help_text='Les images doivent être de format TIFF ou JPEG.')
+    lien_telechargement = models.ImageField(upload_to='bdd_icono/hd', null=False, blank=False, verbose_name='Dépôt du fichier image', help_text='Les images doivent être de format TIFF ou JPEG.')
     permalien = models.CharField(max_length=250, null=True, blank=True,)
     n_cliche_numerique = models.CharField(max_length=250, null=True, blank=True, verbose_name = "Numéro de cliché numérique")
     n_cliche_photo = models.CharField(max_length=250, null=True, blank=True,  verbose_name = "Numéro de cliché physique")
