@@ -22,10 +22,10 @@
     <div class="col-md-5 m-2 p-2 bg-light border rounded d-flex flex-column justify-content-between">
       <div>
         <p>
-          <strong>Cote :</strong>{{ image.cote }}<br>
-          <strong>Auteur(s) :</strong>{{ image.fk_extrait_de.fk_auteur.auteur_nom }}<br>
-          <strong>Légende :</strong> {{ image.legende }}<br>
-          <strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}
+          {% if image.cote %}<strong>Cote :</strong>{{ image.cote }}<br>{% endif %}
+          {% if image.fk_extrait_de.fk_auteur.auteur_nom %}<strong>Auteur(s) :</strong>{{ image.fk_extrait_de.fk_auteur.auteur_nom }}<br>{% endif %}
+          {% if image.legende %}<strong>Légende :</strong> {{ image.legende }}<br>{% endif %}
+          {% if image.fk_extrait_de.date_creation %}<strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}{% endif %}
         </p>
       </div>
       <div>
