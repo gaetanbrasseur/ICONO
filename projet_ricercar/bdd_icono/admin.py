@@ -9,7 +9,7 @@ from django import forms
 
 class IntExtraitDeAuteurInLine(admin.StackedInline):
     model = IntExtraitDeAuteur
-    extra = 0
+    extra = 0 #Personnalise ici le nombre de choix par défaut qui s'affiche dans l'interface d'ajout d'un auteur dans la table extrait. Ici, 0 signifie que par défaut, il faut cliquer sur ajouter, et qu'aucun champ vide n'est proposé de base.
 
 
 class IntExtraitDeTechniqueInLine(admin.StackedInline):
@@ -20,11 +20,11 @@ class IntExtraitDeTechniqueInLine(admin.StackedInline):
 class IntImageDonneesBiblioInLine(admin.StackedInline):
     model = IntImageDonneesBiblio
     autocomplete_fields = ['fk_donnees_biblio']
-    extra = 1
+    extra = 1 #Personnalise ici le nombre de choix par défaut qui s'affiche dans l'interface d'ajout d'un auteur dans la table extrait. Ici, 1 signifie que par défaut, un champ vide a remplir est proposé à l'utilsateur.
 
 class IntImageMotCleInLine(admin.StackedInline):
     model = IntImageMotCle
-    autocomplete_fields = ['fk_mot_cle']
+    autocomplete_fields = ['fk_mot_cle'] #Permet de proposer, lors l'ajout d'une nouvelle image, les propositions des mots-clés existent à l'utilisateur afin qu'il les séléctionne sans avoir à les retaper.
     extra = 1
 
 class IntImageThemeInLine(admin.StackedInline):
@@ -52,26 +52,30 @@ class ImageAdmin(admin.ModelAdmin):
         })
     )
     autocomplete_fields = ['mots_cles', 'themes', 'fk_photographe', 'fk_extrait_de', 'fk_departement']
-    inlines = [IntImageMotCleInLine, IntImageThemeInLine, IntImageDonneesBiblioInLine]
+    inlines = [IntImageMotCleInLine, IntImageThemeInLine, IntImageDonneesBiblioInLine] #Appelle les tables intermédiraires dans l'interface d'ajout d'une Image.
     list_display = ('n_cesr','get_description_extrait', 'legende', 'cote', 'get_extrait', 'get_date', 'get_periode', 'image_format','lien_telechargement', 'mode', 'resolution', 'photographie_type', 'credit', 'n_cliche_numerique', 'n_cliche_photo')
     list_filter = ('fk_extrait_de__categorie', 'fk_extrait_de__periode_creation')
     search_fields = ['legende', 'cote', 'n_cesr', 'fk_extrait_de__extrait_de_nom', 'fk_departement__departement_nom', 'fk_departement__fk_institution__institution_nom']
-    search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, son numéro d\'inventaire, le nom du support, le nom du département de collection ou le nom de l\'institution'
+    search_help_text = 'La recherche porte sur la légende accompagnant l\'image, son numéro de document CESR, son numéro d\'inventaire, le nom du support, le nom du département de collection ou le nom de l\'institution.'
     ordering = ['n_cesr']
 
     def get_description_extrait(self, obj):
+        """ Fonction permettant de récupérer seulement les 75 premiers caractères de la description d'une image, afin de l'afficher dans la liste des images."""
         return obj.description[:75] + '...' if obj.description and len(obj.description) > 75 else obj.description
     get_description_extrait.short_description = 'Description'
 
     def get_extrait(self, obj):
+        """ Fonction permettant de récupérer le nom de l'extrait d'une Image. """
         return obj.fk_extrait_de.extrait_de_nom if obj.fk_extrait_de else "-"
     get_extrait.short_description = 'Extrait de'
     
     def get_date(self, obj):
+        """ Fonction permettant de récupérer la date de création de l'extrait d'une Image. """
         return obj.fk_extrait_de.date_creation if obj.fk_extrait_de else "-"
     get_date.short_description = 'Date de création'
 
     def get_periode(self, obj):
+        """ Fonction permettant de récupérer la période de création de l'extrait d'une Image. """
         return obj.fk_extrait_de.periode_creation if obj.fk_extrait_de else "-"
     get_periode.short_description = 'Periode de création'
 
@@ -132,6 +136,7 @@ class DepartementCollectionAdmin(admin.ModelAdmin):
     )
     list_display = ('departement_nom', 'get_institution')
     def get_institution(self, obj):
+        """ Fonction permettant de récupérer le nom de l'institution d'un departement de collection. """
         return obj.fk_institution.institution_nom if obj.fk_institution else "-"
     get_institution.short_description = 'Institution'
     search_fields = ('departement_nom', 'fk_institution__institution_nom', 'fk_institution__pays')
