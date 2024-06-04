@@ -237,10 +237,10 @@ class DonneesBiblio(models.Model):
     
     def __str__(self):
         """
-Génère une chaîne de caractère de l’objet DonneesBiblio et en particulier de son champ ref_biblio.
+Génère une chaîne de caractère de l’objet DonneesBiblio et en particulier de son champ edition.
 Sortie : Une chaîne de caractère de l'objet DonneesBiblio.
         """
-        return self.ref_biblio
+        return self.edition
     
 class Institution(models.Model):
     institution_nom = models.CharField(max_length=50, null=False, blank=False, verbose_name="Nom de l'institution")
