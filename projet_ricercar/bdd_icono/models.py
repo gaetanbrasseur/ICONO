@@ -54,7 +54,7 @@ class Image(models.Model):
         """
 
         self.set_format()
-        
+        super().save(*args, **kwargs)
         chemin_relatif_miniatures = 'bdd_icono/miniatures'
         chemin_miniatures = os.path.join(settings.MEDIA_ROOT, chemin_relatif_miniatures)
         os.makedirs(chemin_miniatures, exist_ok=True)
