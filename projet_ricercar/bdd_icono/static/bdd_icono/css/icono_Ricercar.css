@@ -1,115 +1,123 @@
-
 /* éléments principaux */
 
-root {
-    --principalcolor : #034F38;
-    --secondarycolor : #033A29;
+:root {
+  --principalcolor: #034F38;
+  --secondarycolor: #033A29;
 }
 
 * {
-    margin: 0;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 html, body {
-    height: 100%;
-  }
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
 
 main {
-    min-height: 100%;
-  }
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
 /*Footer*/
 
 footer {
-    width: 100%;
-    height: 100px;
-    bottom: 0;
+  width: 100%;
+  height: 100px;
+  bottom: 0;
 }
 
 .footer-logo {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 /* Boutons */
 
 .btn-ric {
-    background-color: #034F38;
-    color: white;
-    border-color: #034F38;
+  background-color: #034F38;
+  color: white;
+  border-color: #034F38;
 }
 
 .btn-ric:hover {
-    background-color: #033A29;
-    color: white;
-    border-color: #033A29;
+  background-color: #033A29;
+  color: white;
+  border-color: #033A29;
 }
 
 /* Image en pop-up */
 
 .image_pop-up {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /*Bandeau page d'accueil*/
 
 .bandeau {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    background-color: #eeeeee;
-    margin: auto;
-    background-image: url('../img/bandeau.png');
-    animation: slide 120s infinite linear alternate;
-  }
-  
-  @keyframes slide {
-    0% {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #eeeeee;
+  margin: auto;
+  background-image: url('../img/bandeau.png');
+  animation: slide 120s infinite linear alternate;
+}
+
+@keyframes slide {
+  0% {
       background-position: 0 0;
-    }
-    100% {
-      background-position: 100% 0;
-    }
   }
+  100% {
+      background-position: 100% 0;
+  }
+}
 
 /* Fonts */
 
 @font-face {
-    font-family: Rubik;
-    src: url("../fonts/Rubik-Light.ttf");
-    font-weight: 300;
+  font-family: Rubik;
+  src: url("../fonts/Rubik-Light.ttf");
+  font-weight: 300;
 }
 
 @font-face {
-    font-family: Rubik;
-    src: url("../fonts/Rubik-Regular.ttf");
-    font-weight: 400;
+  font-family: Rubik;
+  src: url("../fonts/Rubik-Regular.ttf");
+  font-weight: 400;
 }
 
 @font-face {
-    font-family: Courgette;
-    src: url("../fonts/Courgette-Regular.ttf");
-    font-weight: 500;
+  font-family: Courgette;
+  src: url("../fonts/Courgette-Regular.ttf");
+  font-weight: 500;
 }
 
 .rubiklight {
-    font-family: "Rubik", sans-serif;
-    font-weight: 300;
-  }
+  font-family: "Rubik", sans-serif;
+  font-weight: 300;
+}
 
 .rubikregular {
-    font-family: "Rubik", sans-serif;
-    font-weight: 400;
-  }
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
 
 .courgette {
-    font-family: "Courgette", cursive;
-    font-weight: 400;
-    font-style: normal;
-  }
+  font-family: "Courgette", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
 
 /* Font size */
 
 .nav-text-size {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
+/* Specific adjustments for potential overflow elements */
+.container-fluid, .navbar, .nav, .row {
+  max-width: 100%;
+}

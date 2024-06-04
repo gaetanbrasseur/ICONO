@@ -13,11 +13,10 @@
     <div class="card-body">
       <form action="{% url 'resultats' %}" name='query' method="POST">
         {{ formulaire|crispy }}{% csrf_token %}
-        <input class="btn btn-info" type="submit" value="Rechercher">
+        <input class="btn btn-info btn-ric" type="submit" value="Rechercher">
       </form>
     </div>
   </div>
 </div>
-
 
 {% endblock %}
