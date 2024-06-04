@@ -7,6 +7,7 @@ from bdd_icono.models import Image
 from django.views import generic
 from django.contrib.auth import views as auth_views
 from django.urls import path
+from django.contrib.auth import logout
 import os
 
 def home(request):
@@ -63,6 +64,10 @@ def download_image(request, image_id):
     except Exception as e:
         raise Http404(f"Erreur lors de la tentative de téléchargement : {e}")
 
+
+def deconnexion(request):
+    logout(request)
+    return redirect('home')
 
 class CustomLoginView(auth_views.LoginView):
     template_name = 'bdd_icono/login.html'
