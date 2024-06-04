@@ -48,9 +48,11 @@
             {% endif %}
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin:index' %}" aria-label="Back Office">Back office</a>
+              <a class="nav-link" href="{% url 'admin:index' %}" aria-label="Back Office">Adminstration</a>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>
