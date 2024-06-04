@@ -13,7 +13,7 @@ urlpatterns =[
     path('image/<int:id_image>/', views.image, name='image'),
     path('download/<int:image_id>/', download_image, name='download_image'),
     path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', CustomLogoutView.as_view(), name='logout'),
+    path('logout/', views.deconnexion, name='logout'),
 ]
 
 if settings.DEBUG:
