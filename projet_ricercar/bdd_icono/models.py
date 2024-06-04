@@ -1,21 +1,26 @@
 from django.db import models
 from django.conf import settings
-from django.core.exceptions import ValidationError
-from .utils import miniatures
+from .utils import miniatures,upload_location,validation_date_creation,validation_periode_creation
 import os
 from django.utils.translation import gettext_lazy as _
 
-def upload_location(instance, filename):
+################################
 
-    filebase, extension = filename.split('.')
-    return 'bdd_icono/hd/%s.%s' % (instance.n_cesr, extension)
+#Tables
+
+################################
 
 class Image(models.Model):
+    #Champs de la table image
     legende = models.TextField(null=True, blank=True, verbose_name='Légende')
     description = models.TextField(null=False, blank=False,verbose_name='Description libre', help_text='Indiquez une description de l\'image')
     existe_en_physique = models.BooleanField(null=False, blank=False, default=True)
     cote = models.CharField(max_length=150, null=True, blank=True, verbose_name = 'Cote', help_text='Indiquez la cote, en cas d\'image provenant d\'extrait pouvant être catalogué (manuscrit, livre, lettre, acte officiel etc.)')
+    
+    #Le champ n_cesr sert de réference pour les noms des fichiers images
     n_cesr = models.CharField(max_length=150, null=False, blank=False, verbose_name = 'numéro de document CESR', help_text=' Format : im_0000')
+    
+    #Le champ image_format est un peu redondant, donc on le génère automatiquement à l'aide du fichier téléversé et ne l'affiche pas dans l'administration pour éviter les confusions
     image_format = models.CharField(null=False, blank=False, verbose_name="Format de l'image", editable=False)
     mode = models.CharField(choices=[('Couleur', 'Couleur'), ('N & B', 'Noir et blanc'),('NR','Non-renseigné')], null=False, blank=False,default='Couleur', verbose_name='Mode')
     resolution = models.CharField(max_length=50, null=False, blank=False, default='non-renseigné', verbose_name = 'Résolution', help_text='Indiquez la résolution de l\'image en DPI.')
@@ -34,89 +39,45 @@ class Image(models.Model):
 
     def set_format(self):
         """
-    Définit le format de l'image.
-    Cette fonction divise le chemin du champs `lien_telechargement` en base de fichier et extension en utilisant le point ('.') comme délimiteur. Il attribue ensuite l'extension au champs `image_format` de l'instance actuelle.
-    Paramètres:
-    self (objet) : l’instance actuelle de la classe.        
+        Cette méthode sert à générer automatiquement le champ 'image_format' en fonction du champ 'lien_telechargement' 
+        qui contient donc l'extension du fichier
         """
         filebase, extension = self.lien_telechargement.path.split('.')
         self.image_format = extension
-    
-  
+        
     def save(self, *args, **kwargs):
         """
-    Enregistre le format d'image dans la base de données et génère une vignette.
-
-    Cette fonction appelle d'abord la fonction `set_format` pour définir le format de l'image.
-    Ensuite, elle appelle la fonction `save` de la table Image pour sauvegarder l'image et son format dans la base de données.
-    Ensuite, elle créée le chemin relatif de la vignette et le chemin absolu en utilisant le paramètre « MEDIA_ROOT ».
-    Elle génère le dossier des vignettes s'il n'existe pas déjà.
-    Elle génère ensuite une image miniature à l'aide de la fonction « miniatures » situé dans le fichier utils.py, en donnant le chemin de l'image originale et le dossier des miniatures.
-    Enfin, elle enregistre à nouveau l'instance dans la base de données.
+        Redéfinition de la méthode save, afin d'appliquer deux modifications à l'entité Image avant la sauvegarde dans la base
+        
+        -Mise à jour du champ format, à l'aide de la méthode set_format
+        -Génération de la miniature basse-définition à l'aide de la fonction utils.miniatures
         """
 
         self.set_format()
-        super().save(*args, **kwargs)
+        
         chemin_relatif_miniatures = 'bdd_icono/miniatures'
         chemin_miniatures = os.path.join(settings.MEDIA_ROOT, chemin_relatif_miniatures)
         os.makedirs(chemin_miniatures, exist_ok=True)
-        
-        print(f"Génération de miniature pour : {self.lien_telechargement.path}")
         miniatures(self.lien_telechargement.path, chemin_miniatures)
+        
+        #Enregistrement de l'Image dans la base
         super().save(*args, **kwargs)
         
-        
-    
-    # def get_siecle(self):
-    #     # penser à mettre un peu de doc pour expliciter les méthodes
-    #     if self.fk_support and self.fk_support.date_creation:
-    #         date_creation = self.fk_support.date_creation
-    #         if date_creation.startswith("vers"):
-    #             annee = date_creation.split("vers")[1].strip().split("-")
-    #             if len(annee) == 1:
-    #                 annee = int(annee[0])
-    #                 siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
-    #                 return f"{siecle}ème siècle"
-    #             else:
-    #                 debut_annee = int(annee[0])
-    #                 fin_annee = int(annee[1])
-    #                 debut_siecle = debut_annee // 100 + 1 if debut_annee % 100 != 0 else debut_annee // 100
-    #                 fin_siecle = fin_annee // 100 + 1 if fin_annee % 100 != 0 else fin_annee // 100
-    #                 if debut_siecle == fin_siecle:
-    #                     return f"{debut_siecle}ème siècle"
-    #                 else:
-    #                     return f"{debut_siecle}-{fin_siecle}ème siècle"
-    #         elif date_creation.startswith("avant"):
-    #             annee = int(date_creation.split("avant")[1].strip())
-    #             siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
-    #             return f"{siecle}ème siècle"
-    #         elif date_creation.startswith("après"):
-    #             annee = int(date_creation.split("après")[1].strip())
-    #             siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
-    #             return f"{siecle}ème siècle"
-    #         else:
-    #             annee = date_creation.split("-")[0].strip()
-    #             annee = int(annee)
-    #             siecle = annee // 100 + 1 if annee % 100 != 0 else annee // 100
-    #             return f"{siecle}ème siècle"
-    #     return "Non-renseigné
-    
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['n_cesr'], name='unique_n_cesr'),
-            models.UniqueConstraint(fields=['lien_telechargement'], name='unique_lien_telechargement')
+            models.UniqueConstraint(fields=['n_cesr'], name='unique_n_cesr'), #Un numéro par image
+            models.UniqueConstraint(fields=['lien_telechargement'], name='unique_lien_telechargement') #Un fichier image par image
         ]
 
     def __str__(self):
-        """
-    Génère une chaîne de caractère de l’objet Image et en particulier de son champs n_cesr.
-    Sortie : Une chaîne de caractère de l'objet Image.
-        """
+        #Le n_cesr est utilisé pour représenter l'image car il est court, unique et obligatoire
         return f'{self.n_cesr}'
 
 class Photographe(models.Model):
     photographe_nom = models.CharField(max_length=150, null=True, blank=True, verbose_name="Nom du photographe")
     photographe_prenom = models.CharField(max_length=50, null=True, blank=True, verbose_name="Prénom du photographe")
+    
+    #Liste des choix définie à l'aide du jeu de données étendu, possibilté d'en faire une table à part entière
     AGENCE_CHOICES = [
         ('RNM', 'RNM'),
         ('BNF', 'BNF'),
@@ -125,22 +86,10 @@ class Photographe(models.Model):
     agence = models.CharField(choices=AGENCE_CHOICES, null=False, blank=False, default = "INDEPENDANT")
 
     def __str__(self):
-        """
-    Génère une représentation sous forme de chaîne de caractère de l'objet Photographe.
-
-    Cette méthode concatène les attributs photographe_nom et photographe_prenom avec un espace entre les deux,
-    et ajoute l'attribut agence à la fin. Si photographe_nom ou photographe_prenom est vide,
-    il est remplacé par une chaîne vide. La chaîne résultante est ensuite débarrassée de tout élément de début ou de fin.
-    des espaces ou des tirets.
-
-    Sortie:
-    str : La représentation sous forme de chaîne de caractères de l’objet Photographe.
-        """
         nom = self.photographe_nom if self.photographe_nom else ""
         prenom = self.photographe_prenom if self.photographe_prenom else ""
         return f"{prenom} {nom} - {self.agence}".strip(" -")
     
-
 class DepartementCollection(models.Model):
     departement_nom = models.CharField(max_length=30, null=True, blank=True, verbose_name='Nom du département de collection')
     fk_institution = models.ForeignKey('Institution', on_delete=models.SET_NULL, null=True, blank=True, verbose_name= "Institution")
@@ -148,12 +97,9 @@ class DepartementCollection(models.Model):
     class Meta:
         verbose_name = 'Département de collection'
         verbose_name_plural = 'Départements de collection'
-    
+        constraints = [
+            models.UniqueConstraint(fields=['departement_nom'], name='unique_departement_nom')]
     def __str__(self):
-        """
-    Génère une chaîne de caractère de l’objet DepartementCollection et en particulier de son champs departement_nom.
-    Sortie : Une chaîne de caractère de l'objet DepartementCollection.
-        """
         return self.departement_nom
 
 class Theme(models.Model):
@@ -165,51 +111,22 @@ class Theme(models.Model):
             models.UniqueConstraint(fields=['theme_libelle'], name='unique_theme_libelle')]
 
     def __str__(self):
-        """
-    Génère une chaîne de caractère de l’objet Theme et en particulier de son champs libelle.
-    Sortie : Une chaîne de caractère de l'objet Theme.
-        """
         return self.theme_libelle
-    
-def validation_date_creation(value):
-    import re
-    """
-    Validation du champ date_creation.
-    Format accepté : AAAA, Avant AAAA, Vers AAAA, Après AAAA, AAAA - AAAA, Vers AAAA - AAAA
-    """
-    pattern = re.compile(r'^(Avant|Vers|Après )?\d{3,4}( - \d{3,4})?$')
-    if not pattern.match(value):
-        raise ValidationError(
-            ('Format de date invalide. Utilisez : "AAAA", "Avant AAAA", "Vers AAAA", "Après AAAA", "AAAA - AAAA", "Vers AAAA - AAAA".'),
-            params={'value': value},
-        )
-
-def validation_periode_creation(value):
-    import re
-    """
-    Validation du champ periode_creation.
-    Format accepté : 1 e Siècle, Avant 16 e Siècle, Vers 8 e Siècle, Après 15 e Siècle, 14 e Siècle - 15 e Siècle
-    """
-    pattern = re.compile(r'^(Avant|Vers|Après )?\d{1,2}e Siècle( - \d{1,2}e Siècle)?$')
-    if not pattern.match(value):
-        raise ValidationError(
-            ('Format de période invalide. Utilisez : "4 e Siècle", "Avant 17 e Siècle", "Vers 10 e Siècle", "Après 15 e Siècle", "16 e Siècle - 17 e Siècle".'),
-            params={'value': value},
-        )
 
 class ExtraitDe(models.Model):
     extrait_de_nom = models.CharField(max_length=150, null=False, blank=False, verbose_name='Nom de l\'extrait')
     categorie = models.CharField(max_length=40, null=False, blank=False, verbose_name='Catégorie', help_text='Catégorie de l\'extrait (manuscrit, tableau, etc.)')
     date_creation = models.CharField(max_length=17, null=True, blank=True, verbose_name='Date de création', help_text='Format : AAAA pour une année précise, AAAA - AAAA pour une plage d\'années. Préfixes possibles : Avant, Vers, Après', validators=[validation_date_creation])
     periode_creation = models.CharField(max_length=23, null=True, blank=True, verbose_name='Période de création', help_text='Format : Siècle en chiffre, suivi de "e Siècle". Exemple : 3e Siècle, 15e Siècle, 14e Siècle - 15e Siècle. Préfixes possibles : Avant, Vers, Après', validators=[validation_periode_creation])
-
+    auteur = models.ManyToManyField('Auteur', through='IntExtraitDeAuteur')
+    technique = models.ManyToManyField('Technique', through='IntExtraitDeTechnique')
+    class Meta:
+        verbose_name = 'Extrait de'
+        constraints = [
+            models.UniqueConstraint(fields=['extrait_de_nom'], name='unique_extrait_de_nom')]
+    
     def __str__(self):
-        """
-Génère une chaîne de caractère de l’objet ExtraitDe et en particulier de son champs nom.
-Sortie : Une chaîne de caractère de l'objet ExtraitDe.
-        """
         return self.extrait_de_nom
-
 
 class Technique(models.Model):
     technique_libelle = models.CharField(max_length=30, null=False, blank=False)
@@ -219,10 +136,6 @@ class Technique(models.Model):
             models.UniqueConstraint(fields=['technique_libelle'], name='unique_technique_libelle')]
     
     def __str__(self):
-        """
-Génère une chaîne de caractère de l’objet Technique et en particulier de son champs libelle.
-Sortie : Une chaîne de caractère de l'objet Technique.
-        """
         return self.technique_libelle
         
 class DonneesBiblio(models.Model):
@@ -236,10 +149,6 @@ class DonneesBiblio(models.Model):
             models.UniqueConstraint(fields=['ref_biblio'], name='unique_ref_biblio')]
     
     def __str__(self):
-        """
-Génère une chaîne de caractère de l’objet DonneesBiblio et en particulier de son champ edition.
-Sortie : Une chaîne de caractère de l'objet DonneesBiblio.
-        """
         return self.edition
     
 class Institution(models.Model):
@@ -249,18 +158,9 @@ class Institution(models.Model):
 
     class Meta:
         ordering = ['institution_nom']
-
+        #Pas de contraintes d'unicité, car le nom de l'institution peut être "bibliothèque municipale" par exemple
+        
     def __str__(self):
-
-        """
-    Génère une représentation sous forme de chaîne de caractères de l'objet Institution.
-
-    Cette méthode concatène les attributs institution_nom, pays et ville avec les séparateurs appropriés et supprime tous les traits d'union de début ou de fin.
-
-    Sortie:
-    str : La chaîne de caractère de l’objet Institution.
-    """
-
         institution_nom = self.institution_nom if self.institution_nom else ""
         pays = self.pays if self.pays else ""
         ville = self.ville if self.ville else ""
@@ -275,18 +175,9 @@ class MotCle(models.Model):
         verbose_name_plural = 'Mots clés'
         constraints = [
             models.UniqueConstraint(fields=['mot_cle_libelle'], name='unique_mot_cle_libelle'),
-            models.UniqueConstraint(fields=['mot_cle_type'], name='unique_mot_cle_type')
-        ]
+            models.UniqueConstraint(fields=['mot_cle_type'], name='unique_mot_cle_type')]
 
     def __str__(self):
-        """
- Génère une représentation sous forme de chaîne de caractères de l'objet MotCle.
-
- Cette méthode concatène les valeurs des attributs `mot_cle_libelle` et `mot_cle_type` avec un trait d'union. Si l'un des attributs est vide, il sera remplacé par une chaîne vide.
-
- Sortie:
- str : Une chaîne de caractères de l'objet MotCle.
-        """
         libelle = self.mot_cle_libelle if self.mot_cle_libelle else ""
         type = self.mot_cle_type if self.mot_cle_type else ""
         return f"{libelle} - {type}"
@@ -300,26 +191,18 @@ class Auteur(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme'], name='unique_auteur'),
-        ]
+            models.UniqueConstraint(fields=['auteur_nom', 'auteur_prenom', 'pseudonyme'], name='unique_auteur'),]
         ordering = ['auteur_nom', 'auteur_prenom']
         verbose_name = 'Auteur.e'
         verbose_name_plural = 'Auteur.e.s'
+        
     def __str__(self):
-        """
-Génère une chaîne de caractère de l’objet Auteur et en particulier de son champs nom.
-Sortie : Une chaîne de caractère de l'objet Auteur.
-        """
         return self.auteur_nom
 
 class Ecole(models.Model):
     ecole = models.CharField(max_length=80, null=False, blank=False, help_text='Indiquez l\'école artistique à laquelle appartient l\'auteur. Exemple : allemande, française, hollandaise...')
 
     def __str__(self):
-        """
-Génère une chaîne de caractère de l’objet Ecole.
-Sortie : Une chaîne de caractère de l'objet Ecole.
-        """
         return self.ecole
 
 class LieuActivite(models.Model):
@@ -332,41 +215,11 @@ class LieuActivite(models.Model):
     def __str__(self):
         return self.lieu_activite
 
+################################
 
-class IntAuteurEcole(models.Model):
-    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False)
-    fk_ecole = models.ForeignKey('Ecole', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Ecole')  # Relation inverse avec Ecole
+#Tables intermédiaires
 
-    class Meta:
-        verbose_name = 'Ecole artistique de l\'auteur'
-        verbose_name_plural = 'Ecoles artistiques des auteurs'
-
-class IntAuteurLieuActivite(models.Model):
-    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE)
-    fk_lieu_activite = models.ForeignKey('LieuActivite', on_delete=models.CASCADE, verbose_name='Lieu d\'activté')
-
-    class Meta:
-        verbose_name = 'Lieu d\'activité de l\'auteur'
-        verbose_name_plural = 'Lieux d\'activité des auteurs'
-
-class IntImageTheme(models.Model):
-    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
-    fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Thème')
-
-    class Meta:
-        verbose_name='Thème'
-        verbose_name_plural='Thèmes'
-
-class IntExtraitDeTechnique(models.Model):
-    fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE, null=False, blank=False, verbose_name = 'Technique')
-    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['fk_technique', 'fk_extrait_de'], name='unique_extrait_technique')
-        ]
-        verbose_name = 'Technique de l\'extrait'
-        verbose_name_plural = 'Techniques de l\'extrait'
+################################
 
 class IntImageMotCle(models.Model):
     fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
@@ -384,19 +237,57 @@ class IntImageDonneesBiblio(models.Model):
     fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['fk_donnees_biblio', 'fk_image'], name='unique_image_donneesbiblio')
-        ]
         verbose_name='Donnée bibliographique'
         verbose_name_plural='Données bibliographiques'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_donnees_biblio', 'fk_image'], name='unique_image_donneesbiblio')]
+
+class IntImageTheme(models.Model):
+    fk_image = models.ForeignKey('Image', on_delete=models.CASCADE, null=False, blank=False)
+    fk_theme = models.ForeignKey('Theme', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Thème')
+
+    class Meta:
+        verbose_name='Thème'
+        verbose_name_plural='Thèmes'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_image', 'fk_theme'], name='unique_image_theme')]
+        
+class IntExtraitDeTechnique(models.Model):
+    fk_technique = models.ForeignKey('Technique', on_delete=models.CASCADE, null=False, blank=False, verbose_name = 'Technique')
+    fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
+
+    class Meta:
+        verbose_name = 'Technique de l\'extrait'
+        verbose_name_plural = 'Techniques de l\'extrait'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_technique', 'fk_extrait_de'], name='unique_extrait_technique')]
 
 class IntExtraitDeAuteur(models.Model):
     fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Auteur.e')
     fk_extrait_de = models.ForeignKey('ExtraitDe', on_delete=models.CASCADE, null=False, blank=False)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['fk_auteur', 'fk_extrait_de'], name='unique_extrait_auteur')
-        ]
         verbose_name = 'Auteur.e de l\'extrait'
         verbose_name_plural = 'Auteur.e.s de l\'extrait'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_auteur', 'fk_extrait_de'], name='unique_extrait_auteur')]
+
+class IntAuteurEcole(models.Model):
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE, null=False, blank=False)
+    fk_ecole = models.ForeignKey('Ecole', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Ecole')  # Relation inverse avec Ecole
+
+    class Meta:
+        verbose_name = 'Ecole artistique de l\'auteur'
+        verbose_name_plural = 'Ecoles artistiques des auteurs'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_auteur', 'fk_ecole'], name='unique_auteur_ecole')]
+
+class IntAuteurLieuActivite(models.Model):
+    fk_auteur = models.ForeignKey('Auteur', on_delete=models.CASCADE)
+    fk_lieu_activite = models.ForeignKey('LieuActivite', on_delete=models.CASCADE, verbose_name='Lieu d\'activté')
+
+    class Meta:
+        verbose_name = 'Lieu d\'activité de l\'auteur'
+        verbose_name_plural = 'Lieux d\'activité des auteurs'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_auteur', 'fk_lieu_activite'], name='unique_auteur_lieu_activite')]
