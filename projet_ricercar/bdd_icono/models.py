@@ -274,8 +274,7 @@ class MotCle(models.Model):
         verbose_name = 'Mot clé'
         verbose_name_plural = 'Mots clés'
         constraints = [
-            models.UniqueConstraint(fields=['mot_cle_libelle'], name='unique_mot_cle_libelle'),
-            models.UniqueConstraint(fields=['mot_cle_type'], name='unique_mot_cle_type')
+            models.UniqueConstraint(fields=['fk_image', 'fk_mot_cle'], name='unique_image_mot_cle')
         ]
 
     def __str__(self):
