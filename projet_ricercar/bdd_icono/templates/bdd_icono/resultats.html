@@ -2,9 +2,13 @@
 {% load static %}
 
 {% block contenu %}
+
+
 {%if param != '' %}
 {{images.count}} Resultats pour : {{param}}
 {%endif%}
+
+
 <div class="container">
   <div class="mt-5">
     <h1 class="text-center courgette">Résultats</h1>
@@ -22,14 +26,22 @@
     <div class="col-md-5 m-2 p-2 bg-light border rounded d-flex flex-column justify-content-between">
       <div>
         <p>
-          {% if image.cote %}<strong>Cote :</strong>{{ image.cote }}<br>{% endif %}
-          {% if image.fk_extrait_de.fk_auteur %}<strong>Auteur(s)</strong> :
-            {% if image.fk_extrait_de.fk_auteur.auteur_nom %}{{image.fk_extrait_de.fk_auteur.auteur_nom|upper}}{% endif %}
-            {% if image.fk_extrait_de.fk_auteur.auteur_prenom %} {{image.fk_extrait_de.fk_auteur.auteur_prenom}} {% endif %}
-            {% if image.fk_extrait_de.fk_auteur.pseudonyme %}(pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}){% endif %}<br>
+          {% if image.cote %}
+            <strong>Cote :</strong>{{ image.cote }}<br>{% endif %}
+          {% if image.fk_extrait_de.fk_auteur %}
+            <strong>Auteur(s)</strong> :
+            {% if image.fk_extrait_de.fk_auteur.auteur_nom %}
+              {{image.fk_extrait_de.fk_auteur.auteur_nom|upper}}{% endif %}
+            {% if image.fk_extrait_de.fk_auteur.auteur_prenom %}
+              {{image.fk_extrait_de.fk_auteur.auteur_prenom}} {% endif %}
+            {% if image.fk_extrait_de.fk_auteur.pseudonyme %}
+              (pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}){% endif %}<br>
             {% endif %}
-          {% if image.description  != 'non-renseigné' %}<strong>Description :</strong> {{ image.description|truncatechars:50  }}{% if mage.description|length > 5 %}...{% endif %}<br>{% endif %}
-          {% if image.fk_extrait_de.date_creation %}<strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}{% endif %}
+
+          {% if image.description  != 'non-renseigné' %}
+            <strong>Description :</strong> {{ image.description|truncatechars:50  }}{% if mage.description|length > 5 %}...{% endif %}<br>{% endif %}
+          {% if image.fk_extrait_de.date_creation %}
+            <strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}{% endif %}
         </p>
       </div>
       <div>

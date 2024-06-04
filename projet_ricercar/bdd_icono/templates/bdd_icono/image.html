@@ -54,47 +54,52 @@
           </div>
           <div class="mt-2">
             <dl>
-              {% if image.fk_extrait_de.fk_auteur %}<dt>Auteur(s) :<span class="rubiklight">
+
+              {% if image.fk_extrait_de.fk_auteur %}
+                <dt>Auteur(s) :<span class="rubiklight">
                 {% if image.fk_extrait_de.fk_auteur.auteur_nom %}{{image.fk_extrait_de.fk_auteur.auteur_nom|upper}}{% endif %}
                 {% if image.fk_extrait_de.fk_auteur.auteur_prenom %}{{image.fk_extrait_de.fk_auteur.auteur_prenom}} {% endif %}
-                {% if image.fk_extrait_de.fk_auteur.pseudonyme %}(pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}){% endif %}
-                </span></dt>
-                {% endif %}
-              {% if image.fk_extrait_de.fk_auteur.lieux_activites %}<dt>Lieu : <span class="rubiklight">{{image.fk_extrait_de.fk_auteur.lieux_activites}}</span></dt>{% endif %}
-              {% if image.legende %}<dt>Légende : <span class="rubiklight">{{image.legende}}</span></dt>{% endif %}
-              {% if image.fk_extrait_de.extrait_de_nom %}<dt>Extrait de : <span class="rubiklight">{{image.fk_extrait_de.extrait_de_nom}}</span></dt>{% endif %}
-              {% if image.fk_extrait_de.date_creation %}<dt>Date : <span class="rubiklight">{{image.fk_extrait_de.date_creation}}</span></dt>{% endif %}
-              {% if image.fk_extrait_de.periode_creation %}<dt>Période : <span class="rubiklight">{{image.fk_extrait_de.periode_creation}}</span></dt>{% endif %}
+                {% if image.fk_extrait_de.fk_auteur.pseudonyme %}pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}{% endif %}
+                </span></dt>{% endif %}
               
-              {% if image.technique_libelle %}<dt>Technique : <span class="rubiklight">{{image.technique_libelle}}</span></dt>{% endif %}
+              {% if image.fk_extrait_de.fk_auteur.lieux_activites %}
+                <dt>Lieu : <span class="rubiklight">{{image.fk_extrait_de.fk_auteur.lieux_activites}}</span></dt>{% endif %}
+
+              {% if image.legende %}
+                <dt>Légende : <span class="rubiklight">{{image.legende}}</span></dt>{% endif %}
               
-              {% if image.fk_extrait_de.categorie %}<dt>Catégorie : <span class="rubiklight">{{image.fk_extrait_de.categorie}}</span></dt>{% endif %}
-              {% if image.description %}<dt>Description : <span class="rubiklight">{{image.description}}</span></dt>{% endif %}
+              {% if image.fk_extrait_de.extrait_de_nom %}
+                <dt>Extrait de : <span class="rubiklight">{{image.fk_extrait_de.extrait_de_nom}}</span></dt>{% endif %}
               
+              {% if image.fk_extrait_de.date_creation %}
+                <dt>Date : <span class="rubiklight">{{image.fk_extrait_de.date_creation}}</span></dt>{% endif %}
+              
+              {% if image.fk_extrait_de.periode_creation %}
+                <dt>Période : <span class="rubiklight">{{image.fk_extrait_de.periode_creation}}</span></dt>{% endif %}
+
+              {% if image.technique_libelle %}
+                <dt>Technique : <span class="rubiklight">{{image.technique_libelle}}</span></dt>{% endif %}
+              
+              {% if image.fk_extrait_de.categorie %}
+                <dt>Catégorie : <span class="rubiklight">{{image.fk_extrait_de.categorie}}</span></dt>{% endif %}
+              
+              {% if image.description %}
+                <dt>Description : <span class="rubiklight">{{image.description}}</span></dt>{% endif %}
+
               {% if image.mots_cles.all %}
-
-                <dt>Mots-clés : <span class="rubiklight">
-                {% for mot_cle in image.mots_cles.all %}
-                  {% if mot_cle.mot_cle_type != 'instrument de musique' %}
-                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
-                  {% endif %}
-                {% endfor %}
-                
-                <dt>Instrument(s) : <span class="rubiklight">
-                {% for mot_cle in image.mots_cles.all %}
-                  {% if mot_cle.mot_cle_type == 'instrument de musique' %}
-                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
-                  {% endif %}
-                {% endfor %}
-
-              {% endif %}
-
+                {% for key,value in oredered_mots_cles.items %}
+                  <dt> Mot clé type : <span class="rubiklight">{{key}} </span></dt>
+                  <dt><span class="rubiklight">
+                    {% for mot_cle in value %}
+                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</dt></span>{% endif %}
+                    {% endfor %}
+                {% endfor %}{% endif %}
+              
               {% if image.themes.all %}
                 <dt>Thème(s) : <span class="rubiklight">
                 {% for theme in image.themes.all %}
                   {{ theme.theme_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
-                {% endfor %}
-              {% endif %}
+                {% endfor %}{% endif %}
               
               {% if image.donnees_biblio.all %}
                 <dt>Références bibliographiques : <span class="rubiklight">
@@ -105,9 +110,8 @@
                 <dt>Ref. Collection Épitome : <span class="rubiklight">
                 {% for ref in image.donnees_biblio.all %}
                   {{ ref.edition }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
-                {% endfor %}
-              {% endif %}
-              
+                {% endfor %}{% endif %}
+                
             </dl>
           </div>
         </div>

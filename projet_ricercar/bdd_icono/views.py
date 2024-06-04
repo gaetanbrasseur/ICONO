@@ -42,9 +42,13 @@ def image(request, id_image):
         image = Image.objects.get(id=id_image)
     except Image.DoesNotExist:
         raise Http404("Aucun auteur trouvé pour cet identifiant")
-    
+    liste_types = list(image.mots_cles.values_list('mot_cle_type', flat=True).distinct())
+    oredered_mots_cles = dict()
+    for type in liste_types:
+        oredered_mots_cles[type.capitalize()] =  image.mots_cles.filter(mot_cle_type='generique')
     context = {
-        'image' : image
+        'image' : image,
+        'oredered_mots_cles' : oredered_mots_cles 
     }
 
     return render(request, 'bdd_icono/image.html', context)
