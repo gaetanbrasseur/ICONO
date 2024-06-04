@@ -1,7 +1,6 @@
 {% extends "bdd_icono/base.html" %}
-{% load crispy_forms_tags %}
 
 {% block contenu %}
     <h2>Vous êtes déconnecté</h2>
-    <a href="{% url 'login' %}">Reconnexion</a>
+    <a href="{% url 'home' %}">Retour à la page d'accueil</a>
 {% endblock %}
