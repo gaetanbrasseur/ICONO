@@ -23,7 +23,11 @@
       <div>
         <p>
           {% if image.cote %}<strong>Cote :</strong>{{ image.cote }}<br>{% endif %}
-          {% if image.fk_extrait_de.fk_auteur.auteur_nom %}<strong>Auteur(s) :</strong>{{ image.fk_extrait_de.fk_auteur.auteur_nom }}<br>{% endif %}
+          {% if image.fk_extrait_de.fk_auteur %}<strong>Auteur(s)</strong> :
+            {% if image.fk_extrait_de.fk_auteur.auteur_nom %}{{image.fk_extrait_de.fk_auteur.auteur_nom|upper}}{% endif %}
+            {% if image.fk_extrait_de.fk_auteur.auteur_prenom %} {{image.fk_extrait_de.fk_auteur.auteur_prenom}} {% endif %}
+            {% if image.fk_extrait_de.fk_auteur.pseudonyme %}(pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}){% endif %}<br>
+            {% endif %}
           {% if image.legende %}<strong>Légende :</strong> {{ image.legende }}<br>{% endif %}
           {% if image.fk_extrait_de.date_creation %}<strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}{% endif %}
         </p>

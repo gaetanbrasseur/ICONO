@@ -23,6 +23,16 @@
 <div class="row mt-5">
   <div class="col-4">
     <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="mt-2 img-thumbnail image_pop-up" width="100%" data-bs-toggle="modal" data-bs-target="#Modal_for_image" data-bs-image-src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg">
+    {% if user.is_authenticated %}
+      <div class="mt-1">
+        <a class="btn btn-ric" href="{% url 'download_image' image.id %}">Télécharger l'image en HD</a>
+      </div>
+      {% else %}
+        <div>
+          <p><span class="rubiktoolight">Vous n'êtes pas connecté, contactez le laboratoire Ricercar pour plus d'informations.</span></p>
+        </div>
+      {% endif %}
+            
   </div>
   <div class="col">
     <div class="card m-2">
@@ -47,29 +57,60 @@
           </div>
           <div class="mt-2">
             <dl>
-              {% if image.fk_extrait_de.fk_auteur.auteur_nom %}<dt>Auteur(s) :<span class="rubiklight">{{image.fk_extrait_de.fk_auteur.auteur_nom}}</span></dt>{% endif %}
+              {% if image.fk_extrait_de.fk_auteur %}<dt>Auteur(s) :<span class="rubiklight">
+                {% if image.fk_extrait_de.fk_auteur.auteur_nom %}{{image.fk_extrait_de.fk_auteur.auteur_nom|upper}}{% endif %}
+                {% if image.fk_extrait_de.fk_auteur.auteur_prenom %}{{image.fk_extrait_de.fk_auteur.auteur_prenom}} {% endif %}
+                {% if image.fk_extrait_de.fk_auteur.pseudonyme %}(pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}){% endif %}
+                </span></dt>
+                {% endif %}
               {% if image.fk_extrait_de.fk_auteur.lieux_activites %}<dt>Lieu : <span class="rubiklight">{{image.fk_extrait_de.fk_auteur.lieux_activites}}</span></dt>{% endif %}
               {% if image.legende %}<dt>Légende : <span class="rubiklight">{{image.legende}}</span></dt>{% endif %}
               {% if image.fk_extrait_de.extrait_de_nom %}<dt>Extrait de : <span class="rubiklight">{{image.fk_extrait_de.extrait_de_nom}}</span></dt>{% endif %}
               {% if image.fk_extrait_de.date_creation %}<dt>Date : <span class="rubiklight">{{image.fk_extrait_de.date_creation}}</span></dt>{% endif %}
               {% if image.fk_extrait_de.periode_creation %}<dt>Période : <span class="rubiklight">{{image.fk_extrait_de.periode_creation}}</span></dt>{% endif %}
+              
               {% if image.technique_libelle %}<dt>Technique : <span class="rubiklight">{{image.technique_libelle}}</span></dt>{% endif %}
+              
               {% if image.fk_extrait_de.categorie %}<dt>Catégorie : <span class="rubiklight">{{image.fk_extrait_de.categorie}}</span></dt>{% endif %}
               {% if image.description %}<dt>Description : <span class="rubiklight">{{image.description}}</span></dt>{% endif %}
-              {% if image.mot_cle_libelle %}<dt>Instruments : <span class="rubiklight">{{image.mot_cle_libelle}}</span></dt>{% endif %} <!-- pas finalisé-->
-              {% if image.mot_cle_libelle %}<dt>Mots clés : <span class="rubiklight">{{image.mot_cle_libelle}}</span></dt>{% endif %}
-              {% if image.themes.fk_theme.theme_libelle %}<dt>Thème : <span class="rubiklight"></span>{{image.themes.fk_theme.theme_libelle}}</dt>{% endif %}
-              {% if image.donnees_biblio.ref_biblio %}<dt>Références bibliographiques : <span class="rubiklight">{{image.donnees_biblio.ref_biblio}}</span></dt>{% endif %}
-              {% if image.donnees_biblio.edition %}<dt>Ref. Collection Épitome : <span class="rubiklight">{{image.donnees_biblio.edition}}</span></dt>{% endif %}
-              {% if user.is_authenticated %}
-                <dt>
-                  <a class="btn btn-ric" href="{% url 'download_image' image.id %}">Télécharger l'image en HD</a>
-                </dt>
-              {% else %}
-                <dt>
-                  <p>Vous n'êtes pas connecté, contactez le laboratoire Ricercar pour plus d'informations.</p>
-                </dt>
+              
+              {% if image.mots_cles.all %}
+
+                <dt>Mots-clés : <span class="rubiklight">
+                {% for mot_cle in image.mots_cles.all %}
+                  {% if mot_cle.mot_cle_type != 'instrument de musique' %}
+                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                  {% endif %}
+                {% endfor %}
+                
+                <dt>Instrument(s) : <span class="rubiklight">
+                {% for mot_cle in image.mots_cles.all %}
+                  {% if mot_cle.mot_cle_type == 'instrument de musique' %}
+                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                  {% endif %}
+                {% endfor %}
+
               {% endif %}
+
+              {% if image.themes.all %}
+                <dt>Thème(s) : <span class="rubiklight">
+                {% for theme in image.themes.all %}
+                  {{ theme.theme_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                {% endfor %}
+              {% endif %}
+              
+              {% if image.donnees_biblio.all %}
+                <dt>Références bibliographiques : <span class="rubiklight">
+                {% for ref in image.donnees_biblio.all %}
+                  {{ ref.ref_biblio }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                {% endfor %}
+
+                <dt>Ref. Collection Épitome : <span class="rubiklight">
+                {% for ref in image.donnees_biblio.all %}
+                  {{ ref.edition }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                {% endfor %}
+              {% endif %}
+              
             </dl>
           </div>
         </div>
@@ -83,7 +124,11 @@
           </div>
           <div class="mt-2">
             <dl>
-              {% if image.fk_photographe.photographe_nom %}<dt>Photographe ou Agence : <span class="rubiklight">{{image.fk_photographe.photographe_nom}}</span></dt>{% endif %}
+              {% if image.fk_photographe %}<dt>Photographe et Agence : <span class="rubiklight">
+                {% if image.fk_photographe.photographe_nom %}{{image.fk_photographe.photographe_nom|upper}} {% endif %}
+                {% if image.fk_photographe.photographe_prenom %}{{image.fk_photographe.photographe_prenom}} {% endif %}
+                {% if image.fk_photographe.agence %}({{image.fk_photographe.agence|lower}}){% endif %}
+              </span></dt>{% endif %}
               {% if image.photographie_type  %}<dt>Type : <span class="rubiklight">{{image.photographie_type}}</span></dt>{% endif %}
               {% if image.mode %}<dt>Mode : <span class="rubiklight">{{image.mode}}</span></dt>{% endif %}
               {% if image.resolution  %}<dt>Résolution : <span class="rubiklight">{{image.resolution}}</span></dt>{% endif %}

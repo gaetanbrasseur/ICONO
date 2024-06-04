@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Déconnexion</title>
-</head>
-<body>
+{% extends "bdd_icono/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block contenu %}
     <h2>Vous êtes déconnecté</h2>
     <a href="{% url 'login' %}">Reconnexion</a>
-</body>
-</html>
+{% endblock %}
