@@ -7,15 +7,25 @@ from .models import (
 )
 from django import forms
 
+################################
+
+#Inlines
+
+################################
+
+class IntAuteurEcoleInLine(admin.TabularInline):
+    model = IntAuteurEcole
+
+class IntAuteurLieuActiviteInLine(admin.TabularInline):
+    model = IntAuteurLieuActivite
+    
 class IntExtraitDeAuteurInLine(admin.StackedInline):
     model = IntExtraitDeAuteur
     extra = 0 #Personnalise ici le nombre de choix par défaut qui s'affiche dans l'interface d'ajout d'un auteur dans la table extrait. Ici, 0 signifie que par défaut, il faut cliquer sur ajouter, et qu'aucun champ vide n'est proposé de base.
 
-
 class IntExtraitDeTechniqueInLine(admin.StackedInline):
     model = IntExtraitDeTechnique
     extra = 0
-
 
 class IntImageDonneesBiblioInLine(admin.StackedInline):
     model = IntImageDonneesBiblio
@@ -24,7 +34,7 @@ class IntImageDonneesBiblioInLine(admin.StackedInline):
 
 class IntImageMotCleInLine(admin.StackedInline):
     model = IntImageMotCle
-    autocomplete_fields = ['fk_mot_cle'] #Permet de proposer, lors l'ajout d'une nouvelle image, les propositions des mots-clés existent à l'utilisateur afin qu'il les séléctionne sans avoir à les retaper.
+    autocomplete_fields = ['fk_mot_cle'] #Permet de proposer, lors l'ajout d'une nouvelle image, les propositions des mots-clés existant à l'utilisateur afin qu'il les séléctionne sans avoir à les retaper.
     extra = 1
 
 class IntImageThemeInLine(admin.StackedInline):
@@ -32,15 +42,19 @@ class IntImageThemeInLine(admin.StackedInline):
     autocomplete_fields = ['fk_theme']
     extra = 1
 
-
 class IntAuteurEcoleInLine(admin.StackedInline):
     model = IntAuteurEcole
     extra = 0
 
-
 class IntAuteurLieuActiviteInLine(admin.StackedInline):
     model = IntAuteurLieuActivite
     extra = 0
+
+################################
+
+#Admin
+
+################################
 
 class ImageAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -60,22 +74,19 @@ class ImageAdmin(admin.ModelAdmin):
     ordering = ['n_cesr']
 
     def get_description_extrait(self, obj):
-        """ Fonction permettant de récupérer seulement les 75 premiers caractères de la description d'une image, afin de l'afficher dans la liste des images."""
+        """Tronque à 75 caractères la description, afin de ne pas saturer l'administration"""
         return obj.description[:75] + '...' if obj.description and len(obj.description) > 75 else obj.description
     get_description_extrait.short_description = 'Description'
 
     def get_extrait(self, obj):
-        """ Fonction permettant de récupérer le nom de l'extrait d'une Image. """
         return obj.fk_extrait_de.extrait_de_nom if obj.fk_extrait_de else "-"
     get_extrait.short_description = 'Extrait de'
     
     def get_date(self, obj):
-        """ Fonction permettant de récupérer la date de création de l'extrait d'une Image. """
         return obj.fk_extrait_de.date_creation if obj.fk_extrait_de else "-"
     get_date.short_description = 'Date de création'
 
     def get_periode(self, obj):
-        """ Fonction permettant de récupérer la période de création de l'extrait d'une Image. """
         return obj.fk_extrait_de.periode_creation if obj.fk_extrait_de else "-"
     get_periode.short_description = 'Periode de création'
 
@@ -88,7 +99,15 @@ class ThemeAdmin(admin.ModelAdmin):
     list_display = ('theme_libelle',)
     search_fields = ('theme_libelle',)
 
-
+class TechniqueAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Information sur la technique', {
+            'fields': ('technique_libelle',)
+        }),
+    )
+    list_display = ('technique_libelle',)
+    search_fields = ('technique_libelle',)
+    
 class MotCleAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Information sur le mot clé', {
@@ -141,7 +160,6 @@ class DepartementCollectionAdmin(admin.ModelAdmin):
     get_institution.short_description = 'Institution'
     search_fields = ('departement_nom', 'fk_institution__institution_nom', 'fk_institution__pays')
 
-
 class DonneesBiblioAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Informations bibliographiques', {
@@ -151,7 +169,6 @@ class DonneesBiblioAdmin(admin.ModelAdmin):
     list_display = ('ref_biblio', 'edition')
     search_fields = ('ref_biblio', 'edition')
     ordering = ['ref_biblio']
-
 
 class PhotographeAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -172,7 +189,6 @@ class EcoleAdmin(admin.ModelAdmin):
     list_display = ('ecole',)
     search_fields = ('ecole',)
     
-
 class LieuActiviteAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Information sur le lieu d\'activité des auteurs', {
@@ -181,7 +197,6 @@ class LieuActiviteAdmin(admin.ModelAdmin):
     )
     list_display = ('lieu_activite',)
     search_fields = ('lieu_activite',)
-
 
 class AuteurAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -194,11 +209,11 @@ class AuteurAdmin(admin.ModelAdmin):
     inlines = [IntAuteurEcoleInLine, IntAuteurLieuActiviteInLine]
     ordering = ['auteur_nom']
 
-class IntAuteurEcoleInLine(admin.TabularInline):
-    model = IntAuteurEcole
+################################
 
-class IntAuteurLieuActiviteInLine(admin.TabularInline):
-    model = IntAuteurLieuActivite
+#Register
+
+################################
 
 admin.site.register(Ecole, EcoleAdmin)
 admin.site.register(LieuActivite, LieuActiviteAdmin)
@@ -211,3 +226,4 @@ admin.site.register(DepartementCollection, DepartementCollectionAdmin)
 admin.site.register(DonneesBiblio, DonneesBiblioAdmin)
 admin.site.register(Photographe, PhotographeAdmin)
 admin.site.register(Auteur, AuteurAdmin)
+admin.site.register(Technique, TechniqueAdmin)
