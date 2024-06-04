@@ -370,8 +370,11 @@ class IntImageMotCle(models.Model):
     fk_mot_cle = models.ForeignKey('MotCle', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Mot clé')
 
     class Meta:
-        verbose_name='Mot clé'
-        verbose_name_plural='Mots clés'
+        verbose_name = 'Mot clé'
+        verbose_name_plural = 'Mots clés'
+        constraints = [
+            models.UniqueConstraint(fields=['fk_image', 'fk_mot_cle'], name='unique_image_mot_cle')
+        ]
 
 class IntImageDonneesBiblio(models.Model):
     fk_donnees_biblio = models.ForeignKey('DonneesBiblio', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Donnée bibliographique correspondante à l\'image')
