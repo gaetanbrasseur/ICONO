@@ -1,6 +1,7 @@
 {% extends "bdd_icono/base.html" %}
 
 {% block contenu %}
+
 <div class="modal" id="Modal_for_image" tabindex="-1" >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -9,9 +10,21 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <div id="panzoom-element" style="overflow: hidden;">
         <img id="Image_in_modal" src="" class="img-fluid" alt="Affichage en grand de {{image.n_cesr}}">
       </div>
+      </div>
       <div class="modal-footer">
+        <button id="zoom_button" type="button" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>
+      </button>
+        <button id="dezoom_button" type="button" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+          </svg>
+        </button>
         <a type="button" class="btn btn-ric" href="{{ image.permalien }}" target="_blank">Lien vers l'originale</a>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Fermer</button>
       </div>
