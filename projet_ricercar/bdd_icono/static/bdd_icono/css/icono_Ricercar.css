@@ -14,12 +14,10 @@
 html, body {
   height: 100%;
   width: 100%;
-  overflow-x: hidden;
 }
 
 main {
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /*Footer*/
@@ -28,10 +26,6 @@ footer {
   width: 100%;
   height: 100px;
   bottom: 0;
-}
-
-.footer-logo {
-  margin-left: 20px;
 }
 
 /* Boutons */
@@ -100,6 +94,11 @@ footer {
   font-weight: 300;
 }
 
+.rubiktoolight {
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+}
+
 .rubikregular {
   font-family: "Rubik", sans-serif;
   font-weight: 400;
@@ -117,7 +116,3 @@ footer {
   font-size: 1.5rem;
 }
 
-/* Specific adjustments for potential overflow elements */
-.container-fluid, .navbar, .nav, .row {
-  max-width: 100%;
-}
