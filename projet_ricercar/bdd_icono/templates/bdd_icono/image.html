@@ -4,13 +4,13 @@
 
 <div class="modal" id="Modal_for_image" tabindex="-1" >
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content modal-size">
       <div class="modal-header">
         <h5 class="modal-title">{{image.n_cesr}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="panzoom-element" style="overflow: hidden;">
+        <div id="panzoom-element" class="panzoom_element">
         <img id="Image_in_modal" src="" class="img-fluid" alt="Affichage en grand de {{image.n_cesr}}">
       </div>
       </div>
@@ -26,7 +26,6 @@
           </svg>
         </button>
         <a type="button" class="btn btn-ric" href="{{ image.permalien }}" target="_blank">Lien vers l'originale</a>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Fermer</button>
       </div>
     </div>
   </div>

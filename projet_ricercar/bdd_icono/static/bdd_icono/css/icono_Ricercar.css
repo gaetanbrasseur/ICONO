@@ -48,6 +48,19 @@ footer {
   cursor: pointer;
 }
 
+.image_modal {
+  max-height: 100%; 
+  max-width: 100%;
+}
+
+.modal-size {
+  max-height: 95vh;
+}
+
+.panzoom_element {
+  overflow: hidden;
+}
+
 /*Bandeau page d'accueil*/
 
 .bandeau {
