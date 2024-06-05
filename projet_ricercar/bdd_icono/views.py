@@ -45,7 +45,7 @@ def image(request, id_image):
     liste_types = list(image.mots_cles.values_list('mot_cle_type', flat=True).distinct())
     oredered_mots_cles = dict()
     for type in liste_types:
-        oredered_mots_cles[type.capitalize()] =  image.mots_cles.filter(mot_cle_type='generique')
+        oredered_mots_cles[type.capitalize()] =  image.mots_cles.filter(mot_cle_type=type)
     context = {
         'image' : image,
         'oredered_mots_cles' : oredered_mots_cles 
