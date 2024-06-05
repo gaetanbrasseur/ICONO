@@ -69,14 +69,20 @@
             <dl>
 
               {% if image.fk_extrait_de.auteur.all %}
-                <dt>Auteur(s) :<span class="rubiklight">
-                {% for auteurs in image.fk_extrait_de.auteur.all %}
-                  {{auteur.auteur_nom|upper}} {{auteur.auteur_prenom}} ({{auteur.pseudonyme}})</span></dt>
+                {% if image.fk_extrait_de.auteur.all|length > 1 %}
+                <dt>Auteurs :<span class="rubiklight">
+                {% elif image.fk_extrait_de.auteur.all|length == 1 %}
+                <dt>Auteur :<span class="rubiklight">
+                {% endif %}
+                {% for auteur in image.fk_extrait_de.auteur.all %}
+                  {{auteur.auteur_nom|upper}} {{auteur.auteur_prenom}} ({{auteur.pseudonyme}})
+                  {% if auteur.lieux_activites.all %}
+                    / ({% for lieu in auteur.lieux_activites.all %}{{lieu}}{% if not forloop.last %} /{% else %})</span></dt>{% endif %}
+                    {% endfor %}
+                  {% endif %}
                 {% endfor %}
               {% endif %}
               
-              {% if image.fk_extrait_de.fk_auteur.lieux_activites %}
-                <dt>Lieu : <span class="rubiklight">{{image.fk_extrait_de.fk_auteur.lieux_activites}}</span></dt>{% endif %}
 
               {% if image.legende %}
                 <dt>Légende : <span class="rubiklight">{{image.legende}}</span></dt>{% endif %}
@@ -89,6 +95,17 @@
               
               {% if image.fk_extrait_de.periode_creation %}
                 <dt>Période : <span class="rubiklight">{{image.fk_extrait_de.periode_creation}}</span></dt>{% endif %}
+
+              {% if image.fk_extrait_de.technique.all %}
+                {% if image.fk_extrait_de.technique.all|length > 1 %}  
+                  <dt>Techniques :<span class="rubiklight">
+                {% elif image.fk_extrait_de.technique.all|length == 1 %}
+                  <dt>Technique :<span class="rubiklight">
+                {% endif %}
+                  {% for technique in image.fk_extrait_de.technique.all %}
+                    {{technique.technique_libelle}}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                  {% endfor %}
+              {% endif %}
 
               {% if image.technique_libelle %}
                 <dt>Technique : <span class="rubiklight">{{image.technique_libelle}}</span></dt>{% endif %}
