@@ -68,12 +68,12 @@
           <div class="mt-2">
             <dl>
 
-              {% if image.fk_extrait_de.fk_auteur %}
+              {% if image.fk_extrait_de.auteur.all %}
                 <dt>Auteur(s) :<span class="rubiklight">
-                {% if image.fk_extrait_de.fk_auteur.auteur_nom %}{{image.fk_extrait_de.fk_auteur.auteur_nom|upper}}{% endif %}
-                {% if image.fk_extrait_de.fk_auteur.auteur_prenom %}{{image.fk_extrait_de.fk_auteur.auteur_prenom}} {% endif %}
-                {% if image.fk_extrait_de.fk_auteur.pseudonyme %}pseudonyme : {{image.fk_extrait_de.fk_auteur.pseudonyme}}{% endif %}
-                </span></dt>{% endif %}
+                {% for auteurs in image.fk_extrait_de.auteur.all %}
+                  {{auteur.auteur_nom|upper}} {{auteur.auteur_prenom}} ({{auteur.pseudonyme}})</span></dt>
+                {% endfor %}
+              {% endif %}
               
               {% if image.fk_extrait_de.fk_auteur.lieux_activites %}
                 <dt>Lieu : <span class="rubiklight">{{image.fk_extrait_de.fk_auteur.lieux_activites}}</span></dt>{% endif %}
@@ -100,22 +100,33 @@
                 <dt>Description : <span class="rubiklight">{{image.description}}</span></dt>{% endif %}
 
               {% if image.mots_cles.all %}
-                {% for key,value in oredered_mots_cles.items %}
-                  <dt> Mot clé type : <span class="rubiklight">{{key}} </span></dt>
-                  <dt><span class="rubiklight">
+                {% for key,value in ordered_mots_cles.items %}
+                  {% if value|length > 1 %}
+                    <dt> Mots clés de type {{key}} : <span class="rubiklight">
+                  {% elif value|length == 1 %}
+                    <dt> Mot clé de type {{key}} : <span class="rubiklight">
+                  {% endif %}
                     {% for mot_cle in value %}
-                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</dt></span>{% endif %}
+                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
                     {% endfor %}
                 {% endfor %}{% endif %}
               
               {% if image.themes.all %}
-                <dt>Thème(s) : <span class="rubiklight">
+                {% if image.themes.all|length > 1 %}     
+                  <dt>Thèmes : <span class="rubiklight">
+                {% elif image.themes.all|length == 1 %}
+                  <dt>Thème : <span class="rubiklight">
+                {% endif %}
                 {% for theme in image.themes.all %}
                   {{ theme.theme_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
                 {% endfor %}{% endif %}
               
               {% if image.donnees_biblio.all %}
-                <dt>Références bibliographiques : <span class="rubiklight">
+                {% if image.donnees_biblio.all|length > 1 %}
+                  <dt>Références bibliographiques : <span class="rubiklight">
+                {% elif image.donnees_biblio.all|length == 1 %}
+                  <dt>Référence bibliographique : <span class="rubiklight">
+                {% endif %}
                 {% for ref in image.donnees_biblio.all %}
                   {{ ref.ref_biblio }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
                 {% endfor %}
