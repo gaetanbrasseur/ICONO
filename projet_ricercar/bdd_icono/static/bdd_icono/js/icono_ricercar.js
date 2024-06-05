@@ -7,3 +7,15 @@ document.addEventListener('DOMContentLoaded', function() {
         image_in_modal.src = image_src; //La source de l'image dans le modal est remplacée par le lien de l'image cliquable
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const element = document.getElementById('panzoom-element');
+    const panzoom = Panzoom(element, {
+      maxScale: 5,
+      minScale: 1,
+      startScale: 1,
+    });
+    zoom_button.addEventListener('click', panzoom.zoomIn);
+    dezoom_button.addEventListener('click', panzoom.zoomOut);
+    element.addEventListener('wheel', panzoom.zoomWithWheel);
+  });
