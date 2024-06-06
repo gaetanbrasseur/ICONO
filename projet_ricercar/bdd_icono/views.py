@@ -27,7 +27,9 @@ def resultats(request):
     images = Image.objects.all()
     param_image = request.POST.get('image')
     images = images.filter(
-        Q(description__icontains=param_image)
+        Q(description__icontains=param_image) | Q(legende__icontains=param_image) | Q(cote__icontains=param_image)
+        | Q(mots_cles__mot_cle_libelle__icontains=param_image) | Q(themes__theme_libelle__icontains=param_image)
+        | Q(fk_extrait_de__extrait_de_nom__icontains=param_image)
     )
     context = {
         'images' : images,
