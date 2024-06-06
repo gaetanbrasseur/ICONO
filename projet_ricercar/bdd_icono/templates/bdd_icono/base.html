@@ -33,8 +33,9 @@
           aria-controls="#navbar" aria-expanded="false" aria-label="Ouvrir et fermer la navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-center rubikregular" id="navbar">
-          <ul class="nav navbar-nav nav-text-size me-auto">
+        <div class="px-3 justify-content-end">
+        <div class="d-flex collapse navbar-collapse rubikregular" id="navbar">
+          <ul class="d-flex nav navbar-nav nav-text-size me-auto">
             <li class="nav-item">
               <a class="nav-link" href="{% url 'home'%}">Accueil</a>
             </li>
@@ -47,8 +48,6 @@
                 <a class="nav-link" href="{% url 'login' %}">Connexion</a>
               </li>
             {% endif %}
-          </ul>
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'admin:index' %}" aria-label="Back Office">Adminstration</a>
@@ -57,30 +56,46 @@
           </ul>
         </div>
       </div>
+      </div>
     </nav>
 
     {% block contenu %}
     {% endblock %}
   </main>
   <footer class="container-fluid d-flex flex-wrap border-top py-3 mt-3 rubikregular bg-dark position-static">
-    <div class="row">
-      <a class="col-2 mt-1" href="https://ricercar-tours.fr/" target="_blank" style="margin-left: 20px;">
-        <img src="{% static 'bdd_icono/img/logo_ricercar_lab.png' %}" class="img-fluid" alt="Logo Ricercar">
-      </a>
-      <a class="col-2" href="https://cesr.cnrs.fr/">
-        <img src="https://ricercar-tours.fr/wp-content/uploads/2018/01/cesr.png" target="_blank" class="img-fluid"
-          width="150px" alt="Logo CESR">
-      </a>
-      <ul class="nav mt-2 col-md-4 justify-content-end nav-text-size">
-        <li class="nav-item">
-          <a class="nav-link text-light" href="https://ricercar-tours.fr/contact-us/"
-            target="_blank"><u>Contacts</u></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="https://ricercar-tours.fr/legal-notice/" target="_blank"><u>Mentions
-              légales</u></a>
-        </li>
-      </ul>
+    <div class="row w-100 pb-2">
+      <div class="col mt-3 d-flex flex-wrap justify-content-center">
+        <a  href="https://ricercar-tours.fr/" target="_blank" style="margin-left: 20px;">
+          <img src="{% static 'bdd_icono/img/logo_ricercar_lab.png' %}" class="img-fluid" alt="Logo Ricercar" width="200px">
+        </a>
+      </div>
+      <div class="col d-flex justify-content-center">
+          <a href="https://cesr.cnrs.fr/" target="_blank" width="100px">
+            <img src="{% static 'bdd_icono/img/logo_cesr.png' %}" class="img-fluid" alt="Logo CESR" style="width: 100px;">
+          </a>
+      </div>
+      <div class="col d-flex flex-wrap justify-content-center">
+        <a href="https://www.culture.gouv.fr/" target="_blank">
+          <img src="{% static 'bdd_icono/img/logo_ministere_culture.png' %}"  class="img-fluid"
+            width="150px" alt="Logo Ministère de la Culture">
+        </a>
+      </div>
+      <div class="col d-flex flex-wrap justify-content-center">
+        <a href="https://www.cnrs.fr/fr" target="_blank">
+          <img src="{% static 'bdd_icono/img/logo_cnrs.png' %}" class="img-fluid" alt="Logo CNRS" width="70px">
+        </a>
+      </div>
+      
+      <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="https://ricercar-tours.fr/contact-us/" target="_blank"><u>Contacts</u></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="https://ricercar-tours.fr/legal-notice/" target="blank"><u>Mentions légales</u></a>
+            </li>
+        </ul>
+      </div>
     </div>
   </footer>
 </body>
