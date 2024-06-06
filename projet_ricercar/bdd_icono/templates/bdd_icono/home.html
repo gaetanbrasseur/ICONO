@@ -1,0 +1,48 @@
+{% extends "bdd_icono/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block contenu %}
+
+<div class="image-container mb-2">
+  <div class="bandeau" text-align="justify"> </div>
+</div>
+
+<div class="container mt-5">
+  <div class="px-5">
+    <div class="pb-2">
+      <h1 class="courgette text-center">Recherche</h1>
+    </div>
+    <div>
+      <div class="px-3">
+        <div class="card">
+          <div class="card-body">
+            <form action="{% url 'resultats' %}" name='query' method="POST">
+              {{ formulaire|crispy }}{% csrf_token %}
+              <div class="d-flex justify-content-end">
+                <input class="btn btn-info btn-ric" type="submit" value="Rechercher">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="my-max py-2 px-max">
+      <p class="rubikregular text-center texte_accueil">
+        The ICONO Ricercar site provides a service designed to enhance the longevity and
+        efficiency of the RICERCAR laboratory's iconographic catalog. Our platform offers
+        researchers an effective and user-friendly tool, including a lexicon tailored to musical
+        iconography.<br><br>
+        Led by a student team from the Centre d’études supérieures de la Renaissance (CESR),
+        the project is part of an initiative to modernize and integrate resources, in line with
+        contemporary needs of researchers and cultural institutions. The stress on
+        interoperability ensures smooth and sustainable data integration, making it an asset for
+        those working in the field.<br><br>
+        Users can view image previews directly on the site, although high-resolution downloads
+        require authorization. The database features a rich and varied collection of iconographic
+        materials, spanning from the Middle Ages to the Renaissance, inviting exploration and
+        discovery
+      </p>
+    </div>
+  </div>
+
+  {% endblock %}

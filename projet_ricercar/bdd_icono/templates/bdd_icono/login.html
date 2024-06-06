@@ -1,0 +1,30 @@
+{% extends "bdd_icono/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block contenu %}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Connexion</div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Nom d'utilisateur</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Mot de passe</label>
+                            {{ form.password }}
+                        </div>
+                        <button type="submit" class="btn btn-ric">Se connecter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "bdd_icono/base.html" %}
+
+{% block contenu %}
+
+<div class="modal" id="Modal_for_image" tabindex="-1" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-size">
+      <div class="modal-header">
+        <h5 class="modal-title">{{image.n_cesr}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="panzoom-element" class="panzoom_element">
+        <img id="Image_in_modal" src="" class="img-fluid" alt="Affichage en grand de {{image.n_cesr}}">
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button id="zoom_button" type="button" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>
+      </button>
+        <button id="dezoom_button" type="button" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+          </svg>
+        </button>
+        <a type="button" class="btn btn-ric" href="{{ image.permalien }}" target="_blank">Lien vers l'originale</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="row mt-5">
+  <div class="col-4">
+    <img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg" class="mt-2 img-thumbnail image_pop-up" width="100%" data-bs-toggle="modal" data-bs-target="#Modal_for_image" data-bs-image-src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg">
+    {% if user.is_authenticated %}
+      <div class="mt-1">
+        <a class="btn btn-ric" href="{% url 'download_image' image.id %}">Télécharger l'image en HD</a>
+      </div>
+      {% else %}
+      {% endif %}
+            
+  </div>
+  <div class="col">
+    <div class="card m-2">
+      <div class="card-body">
+        <div class="d-flex w-100 justify-content-between flex-wrap">
+          <h4 class="card-title">Lieu de conservation</h4>
+        </div>
+        <div class="mt-2">
+          <dl>
+            {% if image.fk_departement.fk_institution.institution_nom %}<dt>Institution : <span class="rubiklight">{{image.fk_departement.fk_institution.institution_nom}}</span></dt>{% endif %}
+            {% if image.fk_departement.departement_nom %}<dt>Fonds Département de collection : <span class="rubiklight">{{image.fk_departement.departement_nom}}</span></dt>{% endif %}
+            {% if image.cote %}<dt>Cote : <span class="rubiklight">{{image.cote}}</span></dt>{% endif %}
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card m-2">
+        <div class="card-body">
+          <div class="d-flex w-100 justify-content-between flex-wrap">
+            <h4 class="card-title">Oeuvre</h4>
+          </div>
+          <div class="mt-2">
+            <dl>
+
+              {% if image.fk_extrait_de.auteur.all %}
+                {% if image.fk_extrait_de.auteur.all|length > 1 %}
+                <dt>Auteurs :<span class="rubiklight">
+                {% elif image.fk_extrait_de.auteur.all|length == 1 %}
+                <dt>Auteur :<span class="rubiklight">
+                {% endif %}
+                {% for auteur in image.fk_extrait_de.auteur.all %}
+                  {{auteur.auteur_nom|upper}} {{auteur.auteur_prenom}} ({{auteur.pseudonyme}})
+                  {% if auteur.lieux_activites.all %}
+                    / ({% for lieu in auteur.lieux_activites.all %}{{lieu}}{% if not forloop.last %} /{% else %})</span></dt>{% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              
+
+              {% if image.legende %}
+                <dt>Légende : <span class="rubiklight">{{image.legende}}</span></dt>{% endif %}
+              
+              {% if image.fk_extrait_de.extrait_de_nom %}
+                <dt>Extrait de : <span class="rubiklight">{{image.fk_extrait_de.extrait_de_nom}}</span></dt>{% endif %}
+              
+              {% if image.fk_extrait_de.date_creation %}
+                <dt>Date : <span class="rubiklight">{{image.fk_extrait_de.date_creation}}</span></dt>{% endif %}
+              
+              {% if image.fk_extrait_de.periode_creation %}
+                <dt>Période : <span class="rubiklight">{{image.fk_extrait_de.periode_creation}}</span></dt>{% endif %}
+
+              {% if image.fk_extrait_de.technique.all %}
+                {% if image.fk_extrait_de.technique.all|length > 1 %}  
+                  <dt>Techniques :<span class="rubiklight">
+                {% elif image.fk_extrait_de.technique.all|length == 1 %}
+                  <dt>Technique :<span class="rubiklight">
+                {% endif %}
+                  {% for technique in image.fk_extrait_de.technique.all %}
+                    {{technique.technique_libelle}}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                  {% endfor %}
+              {% endif %}
+
+              {% if image.technique_libelle %}
+                <dt>Technique : <span class="rubiklight">{{image.technique_libelle}}</span></dt>{% endif %}
+              
+              {% if image.fk_extrait_de.categorie %}
+                <dt>Catégorie : <span class="rubiklight">{{image.fk_extrait_de.categorie}}</span></dt>{% endif %}
+              
+              {% if image.description %}
+                <dt>Description : <span class="rubiklight">{{image.description}}</span></dt>{% endif %}
+
+              {% if image.mots_cles.all %}
+                {% for key,value in ordered_mots_cles.items %}
+                  {% if value|length > 1 %}
+                    <dt> Mots clés de type {{key}} : <span class="rubiklight">
+                  {% elif value|length == 1 %}
+                    <dt> Mot clé de type {{key}} : <span class="rubiklight">
+                  {% endif %}
+                    {% for mot_cle in value %}
+                    {{ mot_cle.mot_cle_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                    {% endfor %}
+                {% endfor %}{% endif %}
+              
+              {% if image.themes.all %}
+                {% if image.themes.all|length > 1 %}     
+                  <dt>Thèmes : <span class="rubiklight">
+                {% elif image.themes.all|length == 1 %}
+                  <dt>Thème : <span class="rubiklight">
+                {% endif %}
+                {% for theme in image.themes.all %}
+                  {{ theme.theme_libelle }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                {% endfor %}{% endif %}
+              
+              {% if image.donnees_biblio.all %}
+                {% if image.donnees_biblio.all|length > 1 %}
+                  <dt>Références bibliographiques : <span class="rubiklight">
+                {% elif image.donnees_biblio.all|length == 1 %}
+                  <dt>Référence bibliographique : <span class="rubiklight">
+                {% endif %}
+                {% for ref in image.donnees_biblio.all %}
+                  {{ ref.ref_biblio }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                {% endfor %}
+
+                <dt>Ref. Collection Épitome : <span class="rubiklight">
+                {% for ref in image.donnees_biblio.all %}
+                  {{ ref.edition }}{% if not forloop.last %} / {% else %}</span></dt>{% endif %}
+                {% endfor %}{% endif %}
+                
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card m-2">
+        <div class="card-body">
+          <div class="d-flex w-100 justify-content-between flex-wrap">
+            <h4 class="card-title">Références Photographiques</h4>
+          </div>
+          <div class="mt-2">
+            <dl>
+              {% if image.fk_photographe %}<dt>Photographe et Agence : <span class="rubiklight">
+                {% if image.fk_photographe.photographe_nom %}{{image.fk_photographe.photographe_nom|upper}} {% endif %}
+                {% if image.fk_photographe.photographe_prenom %}{{image.fk_photographe.photographe_prenom}} {% endif %}
+                {% if image.fk_photographe.agence %}({{image.fk_photographe.agence|lower}}){% endif %}
+              </span></dt>{% endif %}
+              {% if image.photographie_type  %}<dt>Type : <span class="rubiklight">{{image.photographie_type}}</span></dt>{% endif %}
+              {% if image.mode %}<dt>Mode : <span class="rubiklight">{{image.mode}}</span></dt>{% endif %}
+              {% if image.resolution  %}<dt>Résolution : <span class="rubiklight">{{image.resolution}}</span></dt>{% endif %}
+              {% if image.image_format %}<dt>Format : <span class="rubiklight">{{image.image_format}}</span></dt>{% endif %}
+              {% if image.credit %}<dt>Crédit : <span class="rubiklight">{{image.credit}}</span></dt>{% endif %}
+              {% if image.permalien %}<dt>Permalien : <span class="rubiklight"><a href="{{image.permalien}}" target="_blank">{{image.permalien}}</a></span></dt>{% endif %}
+              <dt>N° doc CESR : <span class="rubiklight">{{image.n_cesr}}</span></span></dt>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
