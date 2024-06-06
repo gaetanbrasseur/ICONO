@@ -1,0 +1,150 @@
+/* éléments principaux */
+
+:root {
+  --principalcolor: #034F38;
+  --secondarycolor: #033A29;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  min-height: 100vh;
+}
+
+/*Footer*/
+
+footer {
+  width: 100%;
+  height: 110px;
+  bottom: 0;
+}
+
+
+
+/* Boutons */
+
+.btn-ric {
+  background-color: #034F38;
+  color: white;
+  border-color: #034F38;
+}
+
+.btn-ric:hover {
+  background-color: #033A29;
+  color: white;
+  border-color: #033A29;
+}
+
+/* Image en pop-up */
+
+.image_pop-up {
+  cursor: pointer;
+}
+
+.image_modal {
+  max-height: 100%; 
+  max-width: 100%;
+}
+
+.modal-size {
+  max-height: 95vh;
+}
+
+.panzoom_element {
+  overflow: hidden;
+}
+
+/*Bandeau page d'accueil*/
+
+.bandeau {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #eeeeee;
+  margin: auto;
+  background-image: url('../img/bandeau.png');
+  animation: slide 120s infinite linear alternate;
+}
+
+@keyframes slide {
+  0% {
+      background-position: 0 0;
+  }
+  100% {
+      background-position: 100% 0;
+  }
+}
+
+/* Fonts */
+
+@font-face {
+  font-family: Rubik;
+  src: url("../fonts/Rubik-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Rubik;
+  src: url("../fonts/Rubik-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Courgette;
+  src: url("../fonts/Courgette-Regular.ttf");
+  font-weight: 500;
+}
+
+.rubiklight {
+  font-family: "Rubik", sans-serif;
+  font-weight: 300;
+}
+
+.rubiktoolight {
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+}
+
+.rubikregular {
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
+
+.courgette {
+  font-family: "Courgette", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Font size */
+
+.nav-text-size {
+  font-size: 1.6rem;
+}
+
+.texte_accueil {
+  font-size: 1.3rem;
+}
+
+/* Padding */
+
+.px-max {
+  padding-left: 13%;
+  padding-right: 13%;
+}
+
+/* Margin */
+
+.my-max {
+  margin-top: 5%;
+  margin-bottom:5%;
+}

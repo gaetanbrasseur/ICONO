@@ -1,0 +1,54 @@
+{% extends "bdd_icono/base.html" %}
+{% load static %}
+
+{% block contenu %}
+
+<div class="container">
+  <div class="mt-5">
+    <h1 class="text-center courgette">Résultats</h1>
+  </div>
+  <div class="d-flex px-max">
+    {%if param != '' %}
+      {{images.count}} Resultats pour : {{param}}
+    {%endif%}
+  </div>
+</div>
+<br>
+<div class="container my-4">
+  {% for image in images %}
+  <div class="row justify-content-center align-items-start mb-2">
+    <div class="col-md-2 m-2 border rounded bg-dark">
+      <a href="{% url 'image' image.id %}"><img src="../../media/bdd_icono/miniatures/{{ image.n_cesr }}.jpg"
+          class="img-fluid" alt="Image {{ image.n_cesr }}"></a>
+
+    </div>
+    <div class="col-md-5 m-2 p-2 bg-light border rounded d-flex flex-column justify-content-between">
+      <div>
+        <p>
+          {% if image.cote %}
+            <strong>Cote : </strong>{{ image.cote }}<br>{% endif %}
+           {% if image.fk_extrait_de.auteur.all %}
+            {% if image.fk_extrait_de.auteur.all|length > 1 %}
+              <strong>Auteurs :</strong>
+            {% elif image.fk_extrait_de.auteur.all|length == 1 %}
+              <strong>Auteur :</strong>
+            {% endif %}
+            {% for auteur in image.fk_extrait_de.auteur.all %}
+              {{auteur.auteur_nom|upper}} {{auteur.auteur_prenom}} ({{auteur.pseudonyme}})<br>
+            {% endfor %}
+          {% endif %}
+
+          {% if image.description  != 'non-renseigné' %}
+            <strong>Description :</strong> {{ image.description|truncatechars:110  }}{% if mage.description|length > 5 %}...{% endif %}<br>{% endif %}
+          {% if image.fk_extrait_de.date_creation %}
+            <strong>Date : </strong>{{ image.fk_extrait_de.date_creation }}{% endif %}
+        </p>
+      </div>
+      <div>
+        <a class="btn btn-ric" href="{% url 'image' image.id %}">Voir l'image</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
