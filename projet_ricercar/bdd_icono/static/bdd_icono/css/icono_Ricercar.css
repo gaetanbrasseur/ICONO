@@ -24,9 +24,11 @@ main {
 
 footer {
   width: 100%;
-  height: 100px;
+  height: 110px;
   bottom: 0;
 }
+
+
 
 /* Boutons */
 
@@ -126,6 +128,23 @@ footer {
 /* Font size */
 
 .nav-text-size {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
+.texte_accueil {
+  font-size: 1.3rem;
+}
+
+/* Padding */
+
+.px-max {
+  padding-left: 13%;
+  padding-right: 13%;
+}
+
+/* Margin */
+
+.my-max {
+  margin-top: 5%;
+  margin-bottom:5%;
+}
