@@ -81,12 +81,12 @@ def validation_date_creation(value):
 def validation_periode_creation(value):
     """
     Validation du champ periode_creation.
-    Format accepté : 1 e Siècle, Avant 16 e Siècle, Vers 8 e Siècle, Après 15 e Siècle, 14 e Siècle - 15 e Siècle
+    Format accepté : 1e Siècle, Avant 16e Siècle, Vers 8e Siècle, Après 15e Siècle, 14e Siècle - 15e Siècle
     """
     pattern = re.compile(r'^(Avant|Vers|Après )?\d{1,2}e Siècle( - \d{1,2}e Siècle)?$')
     if not pattern.match(value):
         raise ValidationError(
-            ('Format de période invalide. Utilisez : "4 e Siècle", "Avant 17 e Siècle", "Vers 10 e Siècle", "Après 15 e Siècle", "16 e Siècle - 17 e Siècle".'),
+            ('Format de période invalide. Utilisez : "4e Siècle", "Avant 17e Siècle", "Vers 10e Siècle", "Après 15e Siècle", "16e Siècle - 17e Siècle".'),
             params={'value': value},
         )
 
