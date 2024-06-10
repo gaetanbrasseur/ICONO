@@ -14,8 +14,9 @@ Setup :
 
 6.Ensuite, à l'aide du JeuTest.sql, on importe les données directement dans pgAdmin à l'aide de l'outil requêtes
 
-Modifications du settings.py : 
-Voici le setting.py utilisé, pour des raisons de confidentialité sur les mots de passe utilisés sur pgAdmin, ce fichier n'est pas présent dans le projet git, il faudra donc utiliser celui présent dans  ce document, en prenant soin de modifier les informations liés au mot de passe pgAdmin
+*Modifications du settings.py : 
+Voici le setting.py utilisé, pour des raisons de confidentialité sur les mots de passe utilisés sur pgAdmin, ce fichier n'est pas présent dans le projet git, il faudra donc utiliser celui présent dans  ce document, en prenant soin de modifier les informations liés au mot de passe pgAdmin*
+
 """
 Django settings for projet_ricercar project.
 
