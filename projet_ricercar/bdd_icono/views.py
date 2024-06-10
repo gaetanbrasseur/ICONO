@@ -30,7 +30,7 @@ def resultats(request):
         Q(description__icontains=param_image) | Q(legende__icontains=param_image) | Q(cote__icontains=param_image)
         | Q(mots_cles__mot_cle_libelle__icontains=param_image) | Q(themes__theme_libelle__icontains=param_image)
         | Q(fk_extrait_de__extrait_de_nom__icontains=param_image)
-    )
+    ).distinct()
     context = {
         'images' : images,
         'param' : param_image
